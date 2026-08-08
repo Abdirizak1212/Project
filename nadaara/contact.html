@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact – Nadaara Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ticker-bar">
+    <span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span>
+    <div class="ticker-track"><div class="ticker-content">
+      <span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span>
+      <span>Mogadishu Tech Summit 2026 draws 5,000+ innovators &nbsp;•&nbsp;</span>
+      <span>New startup accelerator opens in Hargeisa with $2M fund &nbsp;•&nbsp;</span>
+      <span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span>
+    </div></div>
+  </div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-hex"><span>N</span></div>
+        <div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li>
+        <li><a href="newsletter.html">Newsletter</a></li><li><a href="about.html">About</a></li><li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button>
+        <a href="newsletter.html" class="btn-subscribe">Subscribe</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="search-overlay" id="searchOverlay"><div class="search-box">
+      <input type="text" placeholder="Search…" id="searchInput" />
+      <button onclick="runSearch()"><i class="fas fa-search"></i></button>
+      <button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button>
+    </div></div>
+  </nav>
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <div class="section-label"><i class="fas fa-envelope"></i> Get in Touch</div>
+      <h1>Contact Nadaara Hub</h1>
+      <p>Have a story tip, partnership inquiry, or just want to say hello? We'd love to hear from you.</p>
+    </div>
+  </section>
+  <section class="contact-page">
+    <div class="container">
+      <div class="contact-wrapper reveal">
+        <div class="contact-form-section">
+          <h2>Send Us a Message</h2>
+          <form class="contact-form" onsubmit="submitContact(event)">
+            <div class="form-row">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name" required /></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Your last name" required /></div>
+            </div>
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required /></div>
+            <div class="form-group"><label>Subject</label>
+              <select><option value="">Select a topic…</option><option>Story Tip or Pitch</option><option>Partnership or Collaboration</option><option>Advertising Inquiry</option><option>Write for Nadaara Hub</option><option>Newsletter Feedback</option><option>Technical Issue</option><option>Other</option></select>
+            </div>
+            <div class="form-group"><label>Message</label><textarea rows="6" placeholder="Tell us what's on your mind…" required></textarea></div>
+            <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Send Message</button>
+          </form>
+        </div>
+        <div class="contact-info-section">
+          <h2>Other Ways to Reach Us</h2>
+          <div class="contact-cards">
+            <div class="contact-card"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-details"><h4>Email Us</h4><p>hello@nadaara.com</p><span>For general inquiries and story pitches</span></div></div>
+            <div class="contact-card"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div class="contact-details"><h4>Our Location</h4><p>Mogadishu, Somalia</p><span>Horn of Africa — covering the region</span></div></div>
+            <div class="contact-card"><div class="contact-icon"><i class="fas fa-clock"></i></div><div class="contact-details"><h4>Response Time</h4><p>Within 24–48 hours</p><span>Monday to Friday, 9am–5pm EAT</span></div></div>
+            <div class="contact-card"><div class="contact-icon"><i class="fas fa-pen-nib"></i></div><div class="contact-details"><h4>Write for Us</h4><p>editor@nadaara.com</p><span>Pitch your article to our editorial team</span></div></div>
+          </div>
+          <div class="contact-social"><h4>Follow Us</h4>
+            <div class="social-grid">
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i><span>@NadaaraHub</span></a>
+              <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i><span>Nadaara Hub</span></a>
+              <a href="#" class="social-link"><i class="fab fa-facebook-f"></i><span>Nadaara Hub</span></a>
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i><span>@nadaarahub</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="faq-section">
+        <div class="section-header reveal"><div class="section-label"><i class="fas fa-question-circle"></i> FAQ</div><h2 class="section-title">Frequently Asked Questions</h2></div>
+        <div class="faq-list reveal">
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>How can I submit an article to Nadaara Hub?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>We welcome guest contributions from journalists, researchers, entrepreneurs, and tech professionals. Email a pitch (200 words + your bio) to editor@nadaara.com. We review all pitches within 5 business days.</p></div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>How do I advertise with Nadaara Hub?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>We offer sponsored content, newsletter sponsorships, banner advertising, and event partnerships. Email hello@nadaara.com with "Advertising Inquiry" as the subject for our media kit and pricing.</p></div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>Can I republish Nadaara Hub articles on my website?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>Our content is protected under copyright. You may share excerpts (up to 150 words) with a clear attribution link back to the original article. For full republication rights, please contact us.</p></div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>How do I report a factual error in an article?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>Email hello@nadaara.com with the article URL, the specific error, and the correct information with sources. We review all correction requests and publish corrections when warranted.</p></div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>Is Nadaara Hub available in Somali language?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>We currently publish primarily in English. We are actively working on a bilingual Somali/English version of the platform. Subscribe to our newsletter to be notified when the full Somali version launches.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer"><div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p><div class="footer-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div></div>
+      <div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="blog.html">Startups</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><i class="fas fa-envelope"></i> hello@nadaara.com</li><li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div>
+  </div></footer>
+  <script src="main.js"></script>
+</body>
+</html>

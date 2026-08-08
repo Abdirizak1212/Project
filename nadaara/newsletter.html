@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Newsletter – Nadaara Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ticker-bar"><span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span><div class="ticker-track"><div class="ticker-content"><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span><span>Mogadishu Tech Summit 2026 draws 5,000+ innovators &nbsp;•&nbsp;</span><span>New startup accelerator opens in Hargeisa with $2M fund &nbsp;•&nbsp;</span><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></a>
+      <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="newsletter.html" class="active">Newsletter</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <div class="nav-actions"><button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button><a href="newsletter.html" class="btn-subscribe">Subscribe</a><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div>
+    </div>
+    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search…" id="searchInput" /><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
+  </nav>
+  <section class="newsletter-hero">
+    <div class="hero-grid-overlay"></div>
+    <div class="newsletter-hero-content">
+      <div class="section-label"><i class="fas fa-envelope-open-text"></i> Weekly Digest</div>
+      <h1>Somalia's Most Trusted<br /><span class="hero-accent">Tech Newsletter</span></h1>
+      <p>Join 12,000+ readers receiving curated insights on AI, startups, fintech, and digital transformation every Thursday morning.</p>
+      <div class="newsletter-social-proof">
+        <div class="avatars"><div class="avatar" style="background:#2d5fa6;">F</div><div class="avatar" style="background:#f0a500;">M</div><div class="avatar" style="background:#4a7ab5;">A</div><div class="avatar" style="background:#1e3a6b;">O</div><div class="avatar" style="background:#2d5fa6;">H</div></div>
+        <span>+12,000 subscribers already inside</span>
+      </div>
+    </div>
+  </section>
+  <section class="nl-subscribe-section">
+    <div class="container">
+      <div class="nl-form-wrapper reveal">
+        <div class="nl-form-left">
+          <h2>Pick Your Topics</h2>
+          <p>Customize your digest. Select the categories you care about most.</p>
+          <div class="nl-topics-grid">
+            <label class="nl-topic-toggle"><input type="checkbox" checked /><span><i class="fas fa-microchip"></i> AI & Machine Learning</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" checked /><span><i class="fas fa-rocket"></i> Startup News</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" /><span><i class="fas fa-coins"></i> Fintech & Banking</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" /><span><i class="fas fa-graduation-cap"></i> Education Tech</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" /><span><i class="fas fa-leaf"></i> Green & Clean Tech</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" /><span><i class="fas fa-landmark"></i> Policy & Government</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" /><span><i class="fas fa-globe-africa"></i> East Africa Tech</span></label>
+            <label class="nl-topic-toggle"><input type="checkbox" /><span><i class="fas fa-shield-alt"></i> Cybersecurity</span></label>
+          </div>
+        </div>
+        <div class="nl-form-right">
+          <div class="nl-form-card">
+            <div class="nl-form-icon"><i class="fas fa-paper-plane"></i></div>
+            <h3>Subscribe Now — It's Free</h3>
+            <form onsubmit="subscribeNewsletter(event)" class="nl-big-form">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="e.g. Fatima" required /></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="e.g. Hassan" required /></div>
+              <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required /></div>
+              <div class="form-group"><label>How often?</label><select><option value="weekly">Weekly (Every Thursday)</option><option value="biweekly">Bi-weekly</option><option value="daily">Daily Briefing</option></select></div>
+              <button type="submit" class="btn-primary full-width"><i class="fas fa-paper-plane"></i> Subscribe Free</button>
+              <p class="newsletter-note"><i class="fas fa-lock"></i> We respect your privacy. No spam, ever.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="nl-editions-section">
+    <div class="container">
+      <div class="section-header reveal"><div class="section-label"><i class="fas fa-book-open"></i> Archive</div><h2 class="section-title">Past Editions</h2><p class="section-subtitle">Browse our newsletter archive to get a taste of what's inside.</p></div>
+      <div class="nl-editions-grid reveal">
+        <div class="nl-edition-card" onclick="openEdition(1)"><div class="edition-header"><span class="edition-num">#047</span><span class="edition-date">Aug 1, 2026</span></div><h4>This Week: Somalia AI Policy + 3 Startups to Watch</h4><p>We covered the government's new AI strategy, profiled three rising startups, and compiled a reading list for tech founders.</p><div class="edition-tags"><span>AI Policy</span><span>Startups</span><span>Reading List</span></div><a href="#" class="read-more">Read Edition <i class="fas fa-arrow-right"></i></a></div>
+        <div class="nl-edition-card" onclick="openEdition(2)"><div class="edition-header"><span class="edition-num">#046</span><span class="edition-date">Jul 25, 2026</span></div><h4>Fintech Special: Mobile Money's Next Decade</h4><p>A deep dive into Hormuud Telecom's digital evolution, EVC Plus expansion, and what's next for Somali fintech.</p><div class="edition-tags"><span>Fintech</span><span>Mobile Money</span><span>Analysis</span></div><a href="#" class="read-more">Read Edition <i class="fas fa-arrow-right"></i></a></div>
+        <div class="nl-edition-card" onclick="openEdition(3)"><div class="edition-header"><span class="edition-num">#045</span><span class="edition-date">Jul 18, 2026</span></div><h4>Mogadishu Tech Summit Recap</h4><p>All the highlights, keynotes, and announcements from Somalia's biggest tech event of the year.</p><div class="edition-tags"><span>Events</span><span>Recap</span><span>Summit</span></div><a href="#" class="read-more">Read Edition <i class="fas fa-arrow-right"></i></a></div>
+        <div class="nl-edition-card" onclick="openEdition(4)"><div class="edition-header"><span class="edition-num">#044</span><span class="edition-date">Jul 11, 2026</span></div><h4>AI Tools for Somali Entrepreneurs</h4><p>Our curated list of 10 AI tools every Somali founder should be using in 2026, with practical guides for each.</p><div class="edition-tags"><span>AI Tools</span><span>Entrepreneurship</span><span>Guide</span></div><a href="#" class="read-more">Read Edition <i class="fas fa-arrow-right"></i></a></div>
+        <div class="nl-edition-card" onclick="openEdition(5)"><div class="edition-header"><span class="edition-num">#043</span><span class="edition-date">Jul 4, 2026</span></div><h4>Education Special: Tech Schools Across Somalia</h4><p>We visited 5 coding schools and bootcamps operating across Mogadishu, Hargeisa, and Garowe to share their stories.</p><div class="edition-tags"><span>Education</span><span>Coding Schools</span><span>Feature</span></div><a href="#" class="read-more">Read Edition <i class="fas fa-arrow-right"></i></a></div>
+        <div class="nl-edition-card" onclick="openEdition(6)"><div class="edition-header"><span class="edition-num">#042</span><span class="edition-date">Jun 27, 2026</span></div><h4>Green Tech: Solar-Powered Somalia</h4><p>Renewable energy startups are making waves. We profiled three solar companies reshaping rural Somalia's energy access.</p><div class="edition-tags"><span>Green Tech</span><span>Solar</span><span>Profiles</span></div><a href="#" class="read-more">Read Edition <i class="fas fa-arrow-right"></i></a></div>
+      </div>
+    </div>
+  </section>
+  <section class="nl-benefits-section">
+    <div class="container">
+      <div class="section-header reveal"><div class="section-label"><i class="fas fa-gift"></i> What You Get</div><h2 class="section-title">What's Inside Each Edition</h2></div>
+      <div class="nl-benefits-grid reveal">
+        <div class="nl-benefit"><div class="benefit-icon"><i class="fas fa-newspaper"></i></div><h4>Top 5 Stories</h4><p>The week's most important tech and business stories curated for Somalia & East Africa.</p></div>
+        <div class="nl-benefit"><div class="benefit-icon"><i class="fas fa-lightbulb"></i></div><h4>Founder Spotlight</h4><p>One featured Somali entrepreneur sharing their journey, lessons, and advice.</p></div>
+        <div class="nl-benefit"><div class="benefit-icon"><i class="fas fa-tools"></i></div><h4>Tool of the Week</h4><p>A practical AI or tech tool with a guide on how to use it in a Somali business context.</p></div>
+        <div class="nl-benefit"><div class="benefit-icon"><i class="fas fa-calendar-alt"></i></div><h4>Events & Opportunities</h4><p>Upcoming tech events, funding opportunities, and programs across the Horn of Africa.</p></div>
+        <div class="nl-benefit"><div class="benefit-icon"><i class="fas fa-chart-line"></i></div><h4>Data Snapshot</h4><p>One data visualization each week showing a trend in Somalia's digital economy.</p></div>
+        <div class="nl-benefit"><div class="benefit-icon"><i class="fas fa-book"></i></div><h4>Reading List</h4><p>3 recommended reads — articles, reports, and books for continuous learning.</p></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p><div class="footer-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><i class="fas fa-envelope"></i> hello@nadaara.com</li><li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div></div></footer>
+  <script src="main.js"></script>
+</body>
+</html>
