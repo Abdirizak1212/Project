@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI News – Nadaara Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ticker-bar"><span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span><div class="ticker-track"><div class="ticker-content"><span>GPT-5 now supports Somali language natively &nbsp;•&nbsp;</span><span>African AI startups raised $800M in Q2 2026 &nbsp;•&nbsp;</span><span>Somalia joins AU Digital Economy Framework &nbsp;•&nbsp;</span><span>OpenAI opens first East Africa office in Nairobi &nbsp;•&nbsp;</span><span>AI-powered drought prediction tool saves 2M Somali farmers &nbsp;•&nbsp;</span><span>GPT-5 now supports Somali language natively &nbsp;•&nbsp;</span></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></a>
+      <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html" class="active">AI News</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <div class="nav-actions"><button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button><a href="newsletter.html" class="btn-subscribe">Subscribe</a><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div>
+    </div>
+    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search AI news…" id="searchInput" /><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
+  </nav>
+  <section class="page-hero ai-page-hero">
+    <div class="page-hero-content">
+      <div class="section-label"><i class="fas fa-microchip"></i> Intelligence Feed</div>
+      <h1>AI News for Somalia & East Africa</h1>
+      <p>Real-time updates on artificial intelligence developments — from global breakthroughs to local innovations shaping the Horn of Africa.</p>
+      <div class="ai-hero-stats"><div class="ai-stat"><span>24/7</span> Live Updates</div><div class="ai-stat"><span>50+</span> AI Topics</div><div class="ai-stat"><span>100%</span> Africa-Focused</div></div>
+    </div>
+  </section>
+  <section class="ai-news-page">
+    <div class="container">
+      <div class="filter-bar reveal">
+        <div class="filter-buttons">
+          <button class="filter-btn active" onclick="setAIFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setAIFilter('breaking',this)">Breaking</button>
+          <button class="filter-btn" onclick="setAIFilter('research',this)">Research</button>
+          <button class="filter-btn" onclick="setAIFilter('startup',this)">Startup</button>
+          <button class="filter-btn" onclick="setAIFilter('policy',this)">Policy</button>
+          <button class="filter-btn" onclick="setAIFilter('health',this)">Health AI</button>
+          <button class="filter-btn" onclick="setAIFilter('education',this)">Edu AI</button>
+        </div>
+      </div>
+      <div class="ai-featured reveal">
+        <div class="ai-featured-content">
+          <div class="ai-card-header"><span class="ai-badge">Featured</span><span class="ai-time"><i class="fas fa-clock"></i> 2 hours ago</span></div>
+          <h2><a href="post.html">GPT-5 Capabilities Unlock New Possibilities for Somali Language Processing</a></h2>
+          <p>Researchers at the University of Mogadishu demonstrate how GPT-5's multilingual capabilities can now accurately handle Somali dialects, including Af-Maay and Af-Maxaa variants.</p>
+          <div class="ai-tags"><span>LLM</span><span>Somali NLP</span><span>Public Sector</span><span>Research</span></div>
+          <a href="post.html" class="read-more">Full Story <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="ai-featured-visual"><div class="ai-visual-box"><i class="fas fa-brain"></i><div class="ai-pulse"></div></div></div>
+      </div>
+      <div class="ai-news-grid-full reveal">
+        <div class="ai-card" data-cat="health"><div class="ai-card-header"><span class="ai-badge research">Health AI</span><span class="ai-time">5 hours ago</span></div><h3><a href="post.html">AI Health Diagnostics Pilot Launched in Three Somali Hospitals</a></h3><p>A WHO-backed program deploys AI diagnostic tools in Mogadishu, Garowe, and Bosaso hospitals to assist doctors with early detection of tuberculosis and malaria.</p><div class="ai-tags"><span>Healthcare</span><span>Computer Vision</span><span>WHO</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="startup"><div class="ai-card-header"><span class="ai-badge startup">Startup</span><span class="ai-time">Yesterday</span></div><h3><a href="post.html">Somali EdTech Firm Raises $500K to Build AI Tutor for East Africa</a></h3><p>Darro Learning secures seed funding to build an AI-powered tutoring platform that adapts to Somali students' learning patterns, with lessons available in Somali and English.</p><div class="ai-tags"><span>EdTech</span><span>Funding</span><span>AI Tutor</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="policy"><div class="ai-card-header"><span class="ai-badge policy">Policy</span><span class="ai-time">2 days ago</span></div><h3><a href="post.html">Government Unveils National AI Strategy Framework for 2026-2030</a></h3><p>Somalia's Federal Government releases a 5-year AI strategy outlining investments in digital infrastructure, AI education, and regulatory frameworks for responsible AI deployment.</p><div class="ai-tags"><span>Government</span><span>Strategy</span><span>Regulation</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="research"><div class="ai-card-header"><span class="ai-badge research">Research</span><span class="ai-time">3 days ago</span></div><h3><a href="post.html">Somali Dataset Project Releases 1M-Token Training Corpus for AI Models</a></h3><p>A collaborative effort between five African universities creates the largest publicly available Somali language dataset, accelerating NLP research for the region.</p><div class="ai-tags"><span>NLP</span><span>Dataset</span><span>Open Source</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="startup"><div class="ai-card-header"><span class="ai-badge startup">Startup</span><span class="ai-time">4 days ago</span></div><h3><a href="post.html">AgriAI Somalia: AI Crop Monitoring Saves Farmers $2M in Losses</a></h3><p>Startup AgriSomali reports its AI-powered satellite crop monitoring platform helped 3,000 farmers in southern Somalia avoid losses from pest infestations in Q2 2026.</p><div class="ai-tags"><span>AgriTech</span><span>Computer Vision</span><span>Food Security</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="breaking"><div class="ai-card-header"><span class="ai-badge">Breaking</span><span class="ai-time">5 days ago</span></div><h3><a href="post.html">Google DeepMind Opens Research Partnership with Somali University</a></h3><p>DeepMind announces a three-year research partnership with Mogadishu University to study AI applications in low-resource language environments and emerging markets.</p><div class="ai-tags"><span>Google</span><span>Research</span><span>Partnership</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="education"><div class="ai-card-header"><span class="ai-badge research">Edu AI</span><span class="ai-time">6 days ago</span></div><h3><a href="post.html">AI Literacy Program Reaches 50,000 Somali Youth in First Year</a></h3><p>A joint UNICEF-government initiative reports 50,000 young Somalis have completed its foundational AI literacy curriculum, with 12,000 going on to advanced training.</p><div class="ai-tags"><span>Education</span><span>UNICEF</span><span>Youth</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="ai-card" data-cat="policy"><div class="ai-card-header"><span class="ai-badge policy">Policy</span><span class="ai-time">1 week ago</span></div><h3><a href="post.html">IGAD Member States Agree on Regional AI Ethics Framework</a></h3><p>The Intergovernmental Authority on Development announces a shared framework for ethical AI development covering all seven member states, including Somalia.</p><div class="ai-tags"><span>Ethics</span><span>IGAD</span><span>Regional Policy</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
+      </div>
+      <div class="load-more-wrapper reveal"><button class="btn-outline load-more-btn" onclick="loadMoreAI()"><i class="fas fa-sync-alt"></i> Load More AI News</button></div>
+    </div>
+  </section>
+  <section class="newsletter-banner"><div class="container"><div class="newsletter-inner reveal"><div class="newsletter-text"><div class="section-label"><i class="fas fa-robot"></i> AI Digest</div><h2>Get AI News in Your Inbox Every Week</h2><p>Stay ahead with curated AI stories from Somalia and East Africa — delivered every Tuesday morning.</p></div><div class="newsletter-form-box"><form onsubmit="subscribeNewsletter(event)"><input type="email" placeholder="Your email address" required /><button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Subscribe to AI Digest</button></form><p class="newsletter-note"><i class="fas fa-lock"></i> AI-focused. No spam. Unsubscribe anytime.</p></div></div></div></section>
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p><div class="footer-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><i class="fas fa-envelope"></i> hello@nadaara.com</li><li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div></div></footer>
+  <script src="main.js"></script>
+</body>
+</html>
