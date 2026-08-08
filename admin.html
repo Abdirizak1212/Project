@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel – Nadaara Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a1628;--navy-mid:#0f2040;--navy-light:#1a3560;
+  --gold:#f0a500;--gold-light:#ffc533;--white:#fff;--gray:#94a3b8;
+  --red:#ef4444;--green:#22c55e;--sidebar-w:240px;
+}
+body{font-family:'Poppins',sans-serif;background:#0d1b2e;color:var(--white);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:var(--navy-mid);border-right:1px solid var(--navy-light);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100}
+.sidebar-logo{padding:1.5rem 1.25rem;border-bottom:1px solid var(--navy-light)}
+.sidebar-logo .hex{width:36px;height:36px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:inline-grid;place-items:center;font-weight:700;color:var(--navy);font-size:1rem;vertical-align:middle;margin-right:.5rem}
+.sidebar-logo span{font-weight:700;font-size:.95rem;vertical-align:middle}
+.sidebar-logo .sub{display:block;color:var(--gray);font-size:.75rem;margin-top:.25rem;padding-left:.25rem}
+nav.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;color:var(--gray);cursor:pointer;font-size:.88rem;font-weight:500;transition:.15s;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(240,165,0,.07);color:var(--white)}
+.nav-item.active{background:rgba(240,165,0,.12);color:var(--gold);border-left-color:var(--gold)}
+.nav-item i{width:18px;text-align:center}
+.nav-section{padding:.5rem 1.25rem .25rem;color:var(--navy-light);font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.sidebar-footer{padding:1rem 1.25rem;border-top:1px solid var(--navy-light)}
+.sidebar-user{display:flex;align-items:center;gap:.75rem}
+.sidebar-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-weight:700;color:var(--navy);font-size:.9rem;flex-shrink:0}
+.sidebar-user .info{min-width:0}
+.sidebar-user .name{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user .role{font-size:.72rem;color:var(--gold)}
+.logout-btn{margin-top:.75rem;width:100%;padding:.6rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:500;transition:.2s}
+.logout-btn:hover{background:rgba(239,68,68,.2)}
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--navy-mid);border-bottom:1px solid var(--navy-light);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar h1{font-size:1.1rem;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:.75rem;color:var(--gray);font-size:.85rem}
+.content{padding:2rem;flex:1}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:12px;padding:1.25rem;display:flex;align-items:center;gap:1rem}
+.stat-icon{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
+.stat-icon.gold{background:rgba(240,165,0,.15);color:var(--gold)}
+.stat-icon.blue{background:rgba(59,130,246,.15);color:#60a5fa}
+.stat-icon.green{background:rgba(34,197,94,.15);color:#4ade80}
+.stat-icon.purple{background:rgba(168,85,247,.15);color:#c084fc}
+.stat-val{font-size:1.5rem;font-weight:700}
+.stat-label{color:var(--gray);font-size:.8rem}
+.stat-change{font-size:.75rem;color:#4ade80}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.section-header h2{font-size:1rem;font-weight:600}
+.btn{padding:.55rem 1.1rem;border-radius:8px;font-family:'Poppins',sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;border:none;transition:.2s;display:inline-flex;align-items:center;gap:.4rem}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline{background:transparent;border:1px solid var(--navy-light);color:var(--white)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm{padding:.35rem .75rem;font-size:.78rem}
+.btn-danger{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
+.btn-danger:hover{background:rgba(239,68,68,.25)}
+.table-wrap{background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--navy)}
+th{padding:.85rem 1rem;text-align:left;font-size:.78rem;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+td{padding:.85rem 1rem;font-size:.85rem;border-top:1px solid var(--navy-light)}
+.tag{display:inline-block;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:600}
+.tag-tech{background:rgba(59,130,246,.15);color:#60a5fa}
+.tag-ai{background:rgba(168,85,247,.15);color:#c084fc}
+.tag-startup{background:rgba(34,197,94,.15);color:#4ade80}
+.tag-fintech{background:rgba(240,165,0,.15);color:var(--gold)}
+.tag-edu{background:rgba(236,72,153,.15);color:#f472b6}
+.tag-culture{background:rgba(249,115,22,.15);color:#fb923c}
+.published{color:#4ade80;font-size:.78rem}
+.draft{color:var(--gray);font-size:.78rem}
+.actions{display:flex;gap:.4rem}
+.panel{display:none}
+.panel.active{display:block}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:16px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;padding:2rem}
+.modal h3{font-size:1.05rem;font-weight:700;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;color:var(--gray);cursor:pointer;font-size:1.1rem}
+.field{margin-bottom:1.1rem}
+.field label{display:block;color:var(--gray);font-size:.82rem;margin-bottom:.35rem;font-weight:500}
+.field input,.field textarea,.field select{width:100%;padding:.65rem .9rem;background:var(--navy);border:1px solid var(--navy-light);border-radius:8px;color:var(--white);font-family:'Poppins',sans-serif;font-size:.87rem;outline:none;transition:.2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold)}
+.field select option{background:var(--navy-mid)}
+.field textarea{resize:vertical;min-height:120px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.modal-footer{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5rem}
+.check-label{display:flex;align-items:center;gap:.5rem;color:var(--gray);font-size:.85rem;cursor:pointer}
+.activity-list{background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:12px;overflow:hidden}
+.activity-item{display:flex;align-items:center;gap:1rem;padding:1rem;border-bottom:1px solid var(--navy-light)}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:.85rem;flex-shrink:0}
+.activity-text{flex:1;font-size:.85rem}
+.activity-text .time{color:var(--gray);font-size:.75rem}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1e3a5f;border:1px solid var(--gold);color:var(--white);padding:.75rem 1.25rem;border-radius:10px;font-size:.85rem;font-weight:500;z-index:999;transform:translateY(100px);opacity:0;transition:.3s}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <span class="hex">N</span><span>NADAARA HUB</span>
+    <span class="sub">Admin Panel</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <div class="nav-item active" onclick="showPanel('dashboard',this)"><i class="fa fa-chart-line"></i> Dashboard</div>
+    <div class="nav-item" onclick="showPanel('articles',this)"><i class="fa fa-newspaper"></i> Articles</div>
+    <div class="nav-item" onclick="showPanel('ai-news',this)"><i class="fa fa-robot"></i> AI News</div>
+    <div class="nav-item" onclick="showPanel('newsletter',this)"><i class="fa fa-envelope"></i> Newsletter</div>
+    <div class="nav-section">Manage</div>
+    <div class="nav-item" onclick="showPanel('users',this)"><i class="fa fa-users"></i> Users</div>
+    <div class="nav-item" onclick="showPanel('settings',this)"><i class="fa fa-gear"></i> Settings</div>
+    <div class="nav-item" onclick="window.open('index.html','_blank')"><i class="fa fa-globe"></i> View Site</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="avatar" id="adminAvatar">A</div>
+      <div class="info">
+        <div class="name" id="adminName">Admin</div>
+        <div class="role">Administrator</div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="handleLogout()"><i class="fa fa-right-from-bracket"></i> Logout</button>
+  </div>
+</div>
+<div class="main">
+  <div class="topbar">
+    <h1 id="panelTitle">Dashboard</h1>
+    <div class="topbar-right">
+      <span><i class="fa fa-circle" style="color:#4ade80;font-size:.5rem"></i> Live</span>
+      <span id="topbarDate"></span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon gold"><i class="fa fa-newspaper"></i></div><div><div class="stat-val">24</div><div class="stat-label">Total Articles</div><div class="stat-change">+3 this week</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue"><i class="fa fa-users"></i></div><div><div class="stat-val">1,284</div><div class="stat-label">Registered Users</div><div class="stat-change">+42 this week</div></div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="fa fa-envelope"></i></div><div><div class="stat-val">3,917</div><div class="stat-label">Newsletter Subscribers</div><div class="stat-change">+118 this week</div></div></div>
+        <div class="stat-card"><div class="stat-icon purple"><i class="fa fa-eye"></i></div><div><div class="stat-val">28.4K</div><div class="stat-label">Page Views</div><div class="stat-change">+12% this month</div></div></div>
+      </div>
+      <div class="section-header"><h2>Recent Activity</h2></div>
+      <div class="activity-list">
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(240,165,0,.15);color:var(--gold)"><i class="fa fa-pen"></i></div><div class="activity-text">New article published: <strong>"Hormuud's AI Strategy 2026"</strong><div class="time">2 hours ago</div></div></div>
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(34,197,94,.15);color:#4ade80"><i class="fa fa-user-plus"></i></div><div class="activity-text">New user registered: <strong>Fatima Osman</strong><div class="time">5 hours ago</div></div></div>
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(59,130,246,.15);color:#60a5fa"><i class="fa fa-envelope"></i></div><div class="activity-text">Newsletter #048 sent to <strong>3,917 subscribers</strong><div class="time">Yesterday</div></div></div>
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(168,85,247,.15);color:#c084fc"><i class="fa fa-comment"></i></div><div class="activity-text">New comment on <strong>"Dahabshiil Digital Banking"</strong><div class="time">Yesterday</div></div></div>
+      </div>
+    </div>
+    <div class="panel" id="panel-articles">
+      <div class="section-header"><h2>All Articles</h2><button class="btn btn-gold" onclick="openModal()"><i class="fa fa-plus"></i> New Article</button></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>Hormuud's AI Strategy for 2026</td><td><span class="tag tag-ai">AI</span></td><td>Ahmed Jama</td><td>Aug 5, 2026</td><td><span class="published">&bull; Published</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>Dahabshiil Launches Digital Banking App</td><td><span class="tag tag-fintech">Fintech</span></td><td>Fatima Hassan</td><td>Aug 3, 2026</td><td><span class="published">&bull; Published</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>Mogadishu Tech Hub Opens New Campus</td><td><span class="tag tag-tech">Technology</span></td><td>Mohamed Ali</td><td>Aug 1, 2026</td><td><span class="published">&bull; Published</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>Somalia's First EdTech Startup Raises $500K</td><td><span class="tag tag-edu">Education</span></td><td>Amina Warsame</td><td>Jul 28, 2026</td><td><span class="draft">&#9711; Draft</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>The Rise of Somali Startups in 2026</td><td><span class="tag tag-startup">Startups</span></td><td>Ahmed Jama</td><td>Jul 25, 2026</td><td><span class="published">&bull; Published</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>Digital Culture: How Gen Z Uses Tech in Somalia</td><td><span class="tag tag-culture">Culture</span></td><td>Fatima Hassan</td><td>Jul 20, 2026</td><td><span class="published">&bull; Published</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel" id="panel-ai-news">
+      <div class="section-header"><h2>AI News Items</h2><button class="btn btn-gold" onclick="openModal()"><i class="fa fa-plus"></i> New AI Story</button></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Headline</th><th>Source</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>UNESCO Partners with Somalia on AI Education</td><td>UNESCO</td><td>Aug 6, 2026</td><td><span class="published">&bull; Live</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>New AI Startup in Hargeisa Gets $2M Funding</td><td>TechCrunch Africa</td><td>Aug 4, 2026</td><td><span class="published">&bull; Live</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>Google AI Announces Somali Language Support</td><td>Google Blog</td><td>Aug 2, 2026</td><td><span class="published">&bull; Live</span></td><td class="actions"><button class="btn btn-sm btn-outline" onclick="editArticle(this)"><i class="fa fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel" id="panel-newsletter">
+      <div class="section-header"><h2>Newsletter Editions</h2><button class="btn btn-gold"><i class="fa fa-paper-plane"></i> Send New Edition</button></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Edition</th><th>Subject</th><th>Sent Date</th><th>Open Rate</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>#048</td><td>Somalia's Tech Week Recap</td><td>Aug 5, 2026</td><td>42%</td><td class="actions"><button class="btn btn-sm btn-outline"><i class="fa fa-eye"></i> View</button></td></tr>
+          <tr><td>#047</td><td>AI in African Agriculture</td><td>Jul 29, 2026</td><td>38%</td><td class="actions"><button class="btn btn-sm btn-outline"><i class="fa fa-eye"></i> View</button></td></tr>
+          <tr><td>#046</td><td>Fintech Boom in the Horn of Africa</td><td>Jul 22, 2026</td><td>45%</td><td class="actions"><button class="btn btn-sm btn-outline"><i class="fa fa-eye"></i> View</button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel" id="panel-users">
+      <div class="section-header"><h2>Registered Users</h2></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>Abdirizak Mohamed</td><td>abdirizakaabdimohamed@gmail.com</td><td><span class="tag tag-ai">Admin</span></td><td>Aug 1, 2026</td><td>&mdash;</td></tr>
+          <tr><td>Fatima Osman</td><td>fatima@example.com</td><td><span class="tag tag-tech">Reader</span></td><td>Aug 5, 2026</td><td class="actions"><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+          <tr><td>Hassan Ahmed</td><td>hassan@example.com</td><td><span class="tag tag-startup">Contributor</span></td><td>Jul 30, 2026</td><td class="actions"><button class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="fa fa-trash"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel" id="panel-settings">
+      <div class="section-header"><h2>Site Settings</h2></div>
+      <div style="background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:12px;padding:1.5rem;max-width:600px">
+        <div class="field"><label>Site Name</label><input type="text" value="Nadaara Hub"></div>
+        <div class="field"><label>Tagline</label><input type="text" value="Somalia's AI &amp; Innovation Hub"></div>
+        <div class="field"><label>Admin Email</label><input type="email" value="abdirizakaabdimohamed@gmail.com"></div>
+        <div class="field"><label>About Text</label><textarea>Nadaara Hub is Somalia's premier platform for technology, entrepreneurship, and digital innovation stories.</textarea></div>
+        <div class="field-row">
+          <div class="field"><label>Twitter / X</label><input type="text" placeholder="@nadaarahub"></div>
+          <div class="field"><label>LinkedIn</label><input type="text" placeholder="linkedin.com/company/nadaarahub"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Facebook</label><input type="text" placeholder="facebook.com/nadaarahub"></div>
+          <div class="field"><label>Instagram</label><input type="text" placeholder="@nadaarahub"></div>
+        </div>
+        <button class="btn btn-gold" onclick="showToast('Settings saved!')"><i class="fa fa-floppy-disk"></i> Save Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="articleModal">
+  <div class="modal">
+    <h3><span id="modalTitle">New Article</span><button class="modal-close" onclick="closeModal()"><i class="fa fa-xmark"></i></button></h3>
+    <div class="field-row"><div class="field" style="grid-column:1/-1"><label>Article Title</label><input type="text" id="mTitle" placeholder="Enter headline..."></div></div>
+    <div class="field-row">
+      <div class="field"><label>Category</label><select id="mCat"><option>Technology</option><option>Startups</option><option>AI</option><option>Fintech</option><option>Education</option><option>Culture</option></select></div>
+      <div class="field"><label>Author</label><input type="text" id="mAuthor" placeholder="Author name"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Publish Date</label><input type="date" id="mDate"></div>
+      <div class="field"><label>Featured Image URL</label><input type="text" id="mImg" placeholder="https://..."></div>
+    </div>
+    <div class="field"><label>Summary</label><input type="text" id="mSummary" placeholder="Short description..."></div>
+    <div class="field"><label>Full Article Content</label><textarea id="mContent" style="min-height:180px" placeholder="Write the full article here..."></textarea></div>
+    <div class="field"><label class="check-label"><input type="checkbox" id="mPublished" checked> Publish immediately</label></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveArticle()"><i class="fa fa-floppy-disk"></i> Save Article</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"><\/script>
+<script src="firebase-config.js"><\/script>
+<script>
+const ADMIN_EMAILS=['abdirizakaabdimohamed@gmail.com'];
+try{
+  firebase.initializeApp(firebaseConfig);
+  firebase.auth().onAuthStateChanged(user=>{
+    if(!user||!ADMIN_EMAILS.includes(user.email.toLowerCase())){
+      window.location.href='login.html';
+    }else{
+      const name=user.displayName||user.email.split('@')[0];
+      document.getElementById('adminName').textContent=name;
+      document.getElementById('adminAvatar').textContent=name[0].toUpperCase();
+    }
+  });
+}catch(e){ document.getElementById('adminName').textContent='Demo Admin'; }
+async function handleLogout(){
+  try{await firebase.auth().signOut();}catch(e){}
+  localStorage.removeItem('nadaara_user');
+  window.location.href='login.html';
+}
+const titles={dashboard:'Dashboard',articles:'Articles','ai-news':'AI News',newsletter:'Newsletter',users:'Users',settings:'Settings'};
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('panelTitle').textContent=titles[id]||id;
+}
+function openModal(){
+  document.getElementById('modalTitle').textContent='New Article';
+  ['mTitle','mAuthor','mSummary','mContent','mImg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('articleModal').classList.add('open');
+}
+function closeModal(){document.getElementById('articleModal').classList.remove('open');}
+function editArticle(btn){
+  const row=btn.closest('tr');
+  document.getElementById('modalTitle').textContent='Edit Article';
+  document.getElementById('mTitle').value=row.cells[0].textContent;
+  document.getElementById('mAuthor').value=row.cells[2]?.textContent||'';
+  document.getElementById('articleModal').classList.add('open');
+}
+function saveArticle(){closeModal();showToast('Article saved!');}
+function deleteRow(btn){if(confirm('Delete this item?')){btn.closest('tr').remove();showToast('Item deleted.');}}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+document.getElementById('topbarDate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+<\/script>
+</body>
+</html>

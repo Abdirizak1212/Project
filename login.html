@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – Nadaara Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a1628;--navy-mid:#0f2040;--navy-light:#1a3560;
+  --gold:#f0a500;--gold-light:#ffc533;--white:#fff;--gray:#94a3b8;
+  --red:#ef4444;--green:#22c55e;
+}
+body{font-family:'Poppins',sans-serif;background:var(--navy);min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--navy-mid);padding:1rem 2rem;display:flex;align-items:center;border-bottom:2px solid var(--gold)}
+.logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+.logo-hex{width:40px;height:40px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:grid;place-items:center;font-weight:700;color:var(--navy);font-size:1.1rem}
+.logo-text{color:var(--white);font-weight:700;font-size:1.1rem;letter-spacing:.05em}
+.logo-text span{color:var(--gold)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
+.card{background:var(--navy-mid);border:1px solid var(--navy-light);border-radius:16px;width:100%;max-width:460px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.card-header{padding:2rem 2rem 0}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--navy-light);margin-bottom:2rem}
+.tab{flex:1;padding:.75rem;text-align:center;cursor:pointer;color:var(--gray);font-weight:500;font-size:.95rem;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.card-body{padding:0 2rem 2rem}
+.form{display:none}
+.form.active{display:block}
+.field{margin-bottom:1.2rem}
+label{display:block;color:var(--gray);font-size:.85rem;margin-bottom:.4rem;font-weight:500}
+.input-wrap{position:relative}
+input[type=text],input[type=email],input[type=password],select{
+  width:100%;padding:.75rem 1rem;background:var(--navy);border:1px solid var(--navy-light);
+  border-radius:8px;color:var(--white);font-family:'Poppins',sans-serif;font-size:.9rem;outline:none;transition:.2s
+}
+input:focus,select:focus{border-color:var(--gold)}
+select option{background:var(--navy-mid)}
+.toggle-pw{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--gray);cursor:pointer;font-size:.9rem}
+.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;font-size:.85rem}
+.row label{margin:0;display:flex;align-items:center;gap:.4rem;cursor:pointer;color:var(--gray)}
+.row a{color:var(--gold);text-decoration:none}
+.btn{width:100%;padding:.85rem;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline{background:transparent;border:1px solid var(--navy-light);color:var(--white);margin-top:.75rem}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.divider{display:flex;align-items:center;gap:1rem;margin:1.2rem 0;color:var(--gray);font-size:.8rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--navy-light)}
+.msg{padding:.75rem 1rem;border-radius:8px;font-size:.85rem;margin-bottom:1rem;display:none}
+.msg.error{background:rgba(239,68,68,.15);border:1px solid var(--red);color:#fca5a5}
+.msg.success{background:rgba(34,197,94,.15);border:1px solid var(--green);color:#86efac}
+.spinner{width:16px;height:16px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:none}
+.btn.loading .spinner{display:block}
+.btn.loading .btn-label{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.back{text-align:center;margin-top:1.5rem;color:var(--gray);font-size:.85rem}
+.back a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-hex">N</div>
+    <span class="logo-text">NADAARA <span>HUB</span></span>
+  </a>
+</nav>
+<main>
+  <div class="card">
+    <div class="card-header">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('login')">Sign In</div>
+        <div class="tab" onclick="switchTab('signup')">Create Account</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div id="msg" class="msg"></div>
+
+      <!-- LOGIN FORM -->
+      <form class="form active" id="loginForm" onsubmit="handleLogin(event)">
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <input type="password" id="loginPassword" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+            <button type="button" class="toggle-pw" onclick="togglePw('loginPassword',this)"><i class="fa fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="row">
+          <label><input type="checkbox" id="remember"> Remember me</label>
+          <a href="#" onclick="handleReset()">Forgot password?</a>
+        </div>
+        <button class="btn btn-gold" id="loginBtn" type="submit">
+          <span class="btn-label">Sign In</span>
+          <div class="spinner"></div>
+        </button>
+        <div class="divider">or</div>
+        <button class="btn btn-outline" type="button" onclick="handleGoogle()">
+          <i class="fab fa-google"></i> Continue with Google
+        </button>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form class="form" id="signupForm" onsubmit="handleSignup(event)">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="signupName" placeholder="Your full name" required>
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="signupEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <input type="password" id="signupPassword" placeholder="Min 6 characters" required>
+            <button type="button" class="toggle-pw" onclick="togglePw('signupPassword',this)"><i class="fa fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" id="signupConfirm" placeholder="Re-enter password" required>
+        </div>
+        <div class="field">
+          <label>Account Type</label>
+          <select id="signupRole">
+            <option value="reader">Reader - Browse &amp; comment</option>
+            <option value="contributor">Contributor - Submit articles</option>
+          </select>
+        </div>
+        <div class="field">
+          <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+            <input type="checkbox" id="terms" required>
+            I agree to the <a href="#" style="color:var(--gold)">Terms of Service</a>
+          </label>
+        </div>
+        <button class="btn btn-gold" id="signupBtn" type="submit">
+          <span class="btn-label">Create Account</span>
+          <div class="spinner"></div>
+        </button>
+        <div class="divider">or</div>
+        <button class="btn btn-outline" type="button" onclick="handleGoogle()">
+          <i class="fab fa-google"></i> Continue with Google
+        </button>
+      </form>
+
+      <div class="back"><a href="index.html"><i class="fa fa-arrow-left"></i> Back to Nadaara Hub</a></div>
+    </div>
+  </div>
+</main>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"><\/script>
+<script src="firebase-config.js"><\/script>
+<script>
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const ADMIN_EMAILS = ['abdirizakaabdimohamed@gmail.com'];
+function isAdmin(email){ return ADMIN_EMAILS.includes(email.toLowerCase()); }
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===(tab==='login'?0:1)));
+  document.querySelectorAll('.form').forEach((f,i)=>f.classList.toggle('active',i===(tab==='login'?0:1)));
+  hideMsg();
+}
+function togglePw(id,btn){
+  const inp=document.getElementById(id);
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  btn.querySelector('i').className='fa fa-eye'+(show?'-slash':'');
+}
+function showMsg(text,type='error'){
+  const el=document.getElementById('msg');
+  el.textContent=text; el.className='msg '+type; el.style.display='block';
+}
+function hideMsg(){ const el=document.getElementById('msg'); el.style.display='none'; }
+function setLoading(btnId,on){
+  const btn=document.getElementById(btnId);
+  btn.classList.toggle('loading',on); btn.disabled=on;
+}
+function afterAuth(user){
+  const role = isAdmin(user.email) ? 'admin' : 'user';
+  localStorage.setItem('nadaara_user', JSON.stringify({
+    uid: user.uid, name: user.displayName||user.email.split('@')[0],
+    email: user.email, role, photo: user.photoURL||''
+  }));
+  window.location.href = role==='admin' ? 'admin.html' : 'index.html';
+}
+async function handleLogin(e){
+  e.preventDefault(); hideMsg(); setLoading('loginBtn',true);
+  const email=document.getElementById('loginEmail').value;
+  const password=document.getElementById('loginPassword').value;
+  try{
+    const cred = await auth.signInWithEmailAndPassword(email, password);
+    afterAuth(cred.user);
+  }catch(err){
+    showMsg(friendlyError(err.code));
+    setLoading('loginBtn',false);
+  }
+}
+async function handleSignup(e){
+  e.preventDefault(); hideMsg();
+  const name=document.getElementById('signupName').value;
+  const email=document.getElementById('signupEmail').value;
+  const pw=document.getElementById('signupPassword').value;
+  const pw2=document.getElementById('signupConfirm').value;
+  if(pw!==pw2){showMsg('Passwords do not match.');return;}
+  setLoading('signupBtn',true);
+  try{
+    const cred = await auth.createUserWithEmailAndPassword(email, pw);
+    await cred.user.updateProfile({displayName: name});
+    afterAuth(cred.user);
+  }catch(err){
+    showMsg(friendlyError(err.code));
+    setLoading('signupBtn',false);
+  }
+}
+async function handleGoogle(){
+  hideMsg();
+  try{
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const cred = await auth.signInWithPopup(provider);
+    afterAuth(cred.user);
+  }catch(err){
+    showMsg(friendlyError(err.code));
+  }
+}
+async function handleReset(){
+  const email=document.getElementById('loginEmail').value;
+  if(!email){showMsg('Enter your email above first.');return;}
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showMsg('Reset email sent! Check your inbox.','success');
+  }catch(err){
+    showMsg(friendlyError(err.code));
+  }
+}
+auth.onAuthStateChanged(user=>{
+  if(user) afterAuth(user);
+});
+function friendlyError(code){
+  const map={
+    'auth/user-not-found':'No account found with this email.',
+    'auth/wrong-password':'Incorrect password.',
+    'auth/email-already-in-use':'This email is already registered.',
+    'auth/weak-password':'Password must be at least 6 characters.',
+    'auth/invalid-email':'Please enter a valid email address.',
+    'auth/too-many-requests':'Too many attempts. Try again later.',
+    'auth/popup-closed-by-user':'Google sign-in was cancelled.',
+    'auth/network-request-failed':'Network error. Check your connection.',
+  };
+  return map[code]||'Something went wrong. Please try again.';
+}
+<\/script>
+</body>
+</html>
