@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Nadaara Hub</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Firebase v10 (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <!-- Uncomment below to enable Firestore:
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  -->
+
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --navy-deep:  #0a1628;
+      --navy-mid:   #112240;
+      --navy-light: #1a3260;
+      --navy-hover: #0d1e38;
+      --gold:       #f0a500;
+      --gold-light: #f7c040;
+      --gold-dim:   rgba(240,165,0,.12);
+      --surface:    #ffffff;
+      --bg:         #f4f6fb;
+      --border:     #e2e8f4;
+      --text-main:  #0a1628;
+      --text-muted: #64748b;
+      --text-light: rgba(255,255,255,.65);
+      --sidebar-w:  240px;
+      --topbar-h:   64px;
+      --radius:     12px;
+      --shadow-sm:  0 1px 4px rgba(10,22,40,.07);
+      --shadow:     0 4px 20px rgba(10,22,40,.10);
+      --shadow-lg:  0 8px 40px rgba(10,22,40,.16);
+      --green:  #22c55e;
+      --red:    #ef4444;
+      --yellow: #eab308;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+
+    /* ── Sidebar ────────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--navy-deep);
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      transition: transform .3s;
+    }
+
+    .sidebar-logo {
+      padding: 1.5rem 1.25rem 1.25rem;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px; height: 36px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: var(--navy-deep);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .sidebar-logo-name span { color: var(--gold); }
+
+    .sidebar-badge {
+      margin-left: auto;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: var(--navy-deep);
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .sidebar-section {
+      padding: 1.25rem .75rem .25rem;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: .5rem .75rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      padding: .65rem .9rem;
+      border-radius: 9px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      margin-bottom: .15rem;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,.06); color: #fff; }
+
+    .nav-item.active {
+      background: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    .nav-item i { width: 18px; text-align: center; font-size: .875rem; }
+
+    .nav-item-badge {
+      margin-left: auto;
+      font-size: .7rem;
+      font-weight: 700;
+      background: var(--gold);
+      color: var(--navy-deep);
+      padding: 1px 7px;
+      border-radius: 999px;
+    }
+
+    .sidebar-footer {
+      padding: 1rem .75rem;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      padding: .65rem .9rem;
+      border-radius: 9px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: rgba(239,68,68,.8);
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .btn-logout:hover { background: rgba(239,68,68,.08); color: #ef4444; }
+
+    /* ── Main area ──────────────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* ── Topbar ─────────────────────────────────────────────── */
+    .topbar {
+      position: sticky;
+      top: 0; z-index: 100;
+      height: var(--topbar-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+
+    .topbar-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-chip {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      font-size: .8125rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .admin-avatar {
+      width: 34px; height: 34px;
+      background: var(--navy-deep);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    /* ── Content ────────────────────────────────────────────── */
+    .content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Tab panes */
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Page header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-header h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy-deep);
+    }
+
+    .page-header p {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-top: .2rem;
+    }
+
+    /* ── Stat Cards ─────────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-body { min-width: 0; }
+
+    .stat-label {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: .4rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--navy-deep);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .stat-delta {
+      font-size: .75rem;
+      font-weight: 500;
+      margin-top: .4rem;
+    }
+
+    .stat-delta.up   { color: var(--green); }
+    .stat-delta.down { color: var(--red);   }
+
+    .stat-icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.gold   { background: rgba(240,165,0,.12);  color: var(--gold); }
+    .stat-icon.navy   { background: rgba(10,22,40,.08);   color: var(--navy-mid); }
+    .stat-icon.green  { background: rgba(34,197,94,.1);   color: var(--green); }
+    .stat-icon.purple { background: rgba(139,92,246,.1);  color: #8b5cf6; }
+
+    /* ── Activity / cards ───────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-head h3 {
+      font-size: .9375rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+    }
+
+    .card-head a { font-size: .8rem; }
+
+    .activity-list { padding: .5rem 0; }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .9rem;
+      padding: .85rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .dot-gold   { background: var(--gold); }
+    .dot-green  { background: var(--green); }
+    .dot-navy   { background: var(--navy-mid); }
+    .dot-red    { background: var(--red); }
+
+    .activity-body { min-width: 0; }
+    .activity-text { font-size: .8375rem; color: var(--text-main); line-height: 1.5; }
+    .activity-time { font-size: .75rem; color: var(--text-muted); margin-top: .15rem; }
+
+    .quick-list { padding: .5rem 0; }
+
+    .quick-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .75rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: .8375rem;
+    }
+
+    .quick-item:last-child { border-bottom: none; }
+    .quick-item-label { color: var(--text-muted); }
+    .quick-item-value { font-weight: 600; color: var(--navy-deep); }
+
+    /* ── Tables ─────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+
+    thead th {
+      background: var(--bg);
+      padding: .8rem 1.25rem;
+      text-align: left;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: .9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(10,22,40,.025); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 600;
+    }
+
+    .badge-published { background: rgba(34,197,94,.1);  color: #16a34a; }
+    .badge-draft     { background: rgba(100,116,139,.1); color: #475569; }
+    .badge-featured  { background: rgba(240,165,0,.12);  color: var(--gold-dim); }
+
+    .action-btns { display: flex; gap: .5rem; }
+
+    .btn-icon {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: .75rem;
+      color: var(--text-muted);
+      transition: border-color .2s, color .2s, background .2s;
+    }
+
+    .btn-icon:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-icon.del:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .6rem 1.1rem;
+      border-radius: 9px;
+      font-family: 'Poppins', system-ui, sans-serif;
+      font-size: .875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      border: none;
+    }
+
+    .btn:active { transform: scale(.98); }
+
+    .btn-primary {
+      background: var(--navy-deep);
+      color: var(--gold);
+    }
+
+    .btn-primary:hover { opacity: .88; }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover { border-color: var(--navy-mid); }
+
+    /* ── Settings form ──────────────────────────────────────── */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .settings-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .settings-card.full { grid-column: 1 / -1; }
+
+    .settings-head {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+
+    .settings-head i { color: var(--gold); }
+
+    .settings-head h3 {
+      font-size: .9375rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+    }
+
+    .settings-body { padding: 1.5rem; }
+
+    .s-field { margin-bottom: 1.15rem; }
+    .s-field:last-child { margin-bottom: 0; }
+
+    .s-field label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: .4rem;
+    }
+
+    .s-field input,
+    .s-field textarea {
+      width: 100%;
+      padding: .65rem .9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Poppins', system-ui, sans-serif;
+      font-size: .875rem;
+      color: var(--text-main);
+      background: var(--surface);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      resize: vertical;
+    }
+
+    .s-field input:focus,
+    .s-field textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(240,165,0,.12);
+    }
+
+    .social-row { display: flex; align-items: center; gap: .6rem; }
+    .social-row i { color: var(--text-muted); font-size: .9rem; width: 20px; }
+
+    /* ── Modal ──────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,.55);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-head h3 {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+    }
+
+    .modal-close {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: none;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      color: var(--text-muted);
+      font-size: .85rem;
+      transition: background .2s;
+    }
+
+    .modal-close:hover { background: var(--bg); }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .9rem 1.25rem;
+    }
+
+    .modal-body .full { grid-column: 1 / -1; }
+
+    .m-field label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: .35rem;
+    }
+
+    .m-field input,
+    .m-field select,
+    .m-field textarea {
+      width: 100%;
+      padding: .6rem .85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Poppins', system-ui, sans-serif;
+      font-size: .875rem;
+      color: var(--text-main);
+      background: var(--surface);
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical;
+      appearance: none;
+    }
+
+    .m-field input:focus,
+    .m-field select:focus,
+    .m-field textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .m-field textarea { min-height: 100px; }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--text-muted);
+    }
+
+    .check-row input[type="checkbox"] { accent-color: var(--gold); }
+
+    .modal-foot {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .75rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Toast ──────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      z-index: 600;
+      background: var(--navy-deep);
+      color: #fff;
+      padding: .85rem 1.25rem;
+      border-radius: 10px;
+      font-size: .875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+    }
+
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast i { color: var(--gold); }
+
+    /* ── Users tab placeholder ──────────────────────────────── */
+    .placeholder-banner {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .placeholder-banner i {
+      font-size: 2.5rem;
+      color: var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .placeholder-banner p { font-size: .9rem; }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .two-col { grid-template-columns: 1fr; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .modal-body { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+      <span class="sidebar-logo-name">Nadaara <span>Hub</span></span>
+      <span class="sidebar-badge">Admin</span>
+    </div>
+
+    <p class="sidebar-section">Main</p>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showTab('dashboard', this)">
+        <i class="fa-solid fa-chart-pie"></i> Dashboard
+      </button>
+      <button class="nav-item" onclick="showTab('articles', this)">
+        <i class="fa-solid fa-newspaper"></i> Articles
+        <span class="nav-item-badge">6</span>
+      </button>
+      <button class="nav-item" onclick="showTab('ainews', this)">
+        <i class="fa-solid fa-robot"></i> AI News
+        <span class="nav-item-badge">4</span>
+      </button>
+      <button class="nav-item" onclick="showTab('newsletter', this)">
+        <i class="fa-solid fa-envelope"></i> Newsletter
+      </button>
+      <button class="nav-item" onclick="showTab('users', this)">
+        <i class="fa-solid fa-users"></i> Users
+      </button>
+
+      <p class="sidebar-section" style="padding-left:0;margin-top:.75rem;">Config</p>
+      <button class="nav-item" onclick="showTab('settings', this)">
+        <i class="fa-solid fa-gear"></i> Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="adminLogout()">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-right">
+        <div class="admin-chip">
+          <div class="admin-avatar" id="admin-initials">AD</div>
+          <span id="admin-name-display">Admin</span>
+        </div>
+        <button class="btn btn-secondary" onclick="adminLogout()" style="font-size:.8125rem;padding:.45rem .85rem;">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Content ──────────────────────────────────────────── -->
+    <div class="content">
+
+      <!-- ════════════ DASHBOARD ════════════ -->
+      <div class="tab-pane active" id="pane-dashboard">
+
+        <div class="page-header">
+          <div>
+            <h2>Dashboard</h2>
+            <p>Overview of your site activity.</p>
+          </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-label">Total Articles</div>
+              <div class="stat-value">142</div>
+              <div class="stat-delta up"><i class="fa-solid fa-arrow-trend-up"></i> +12 this month</div>
+            </div>
+            <div class="stat-icon gold"><i class="fa-solid fa-newspaper"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-label">Total Users</div>
+              <div class="stat-value">3,841</div>
+              <div class="stat-delta up"><i class="fa-solid fa-arrow-trend-up"></i> +238 this month</div>
+            </div>
+            <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-label">Newsletter Subscribers</div>
+              <div class="stat-value">1,209</div>
+              <div class="stat-delta up"><i class="fa-solid fa-arrow-trend-up"></i> +54 this month</div>
+            </div>
+            <div class="stat-icon navy"><i class="fa-solid fa-envelope"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-label">Page Views</div>
+              <div class="stat-value">28.4k</div>
+              <div class="stat-delta down"><i class="fa-solid fa-arrow-trend-down"></i> -3% vs last month</div>
+            </div>
+            <div class="stat-icon purple"><i class="fa-solid fa-chart-line"></i></div>
+          </div>
+        </div>
+
+        <!-- Activity + Quick stats -->
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head">
+              <h3>Recent Activity</h3>
+              <a href="#">View all</a>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <span class="activity-dot dot-gold"></span>
+                <div class="activity-body">
+                  <div class="activity-text">New article published: <strong>"AI in Somali Education"</strong></div>
+                  <div class="activity-time">2 minutes ago · by Contributor</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot dot-green"></span>
+                <div class="activity-body">
+                  <div class="activity-text">New user registered: <strong>Faadumo Abdi</strong></div>
+                  <div class="activity-time">18 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot dot-navy"></span>
+                <div class="activity-body">
+                  <div class="activity-text">Newsletter campaign sent to <strong>1,209 subscribers</strong></div>
+                  <div class="activity-time">1 hour ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot dot-red"></span>
+                <div class="activity-body">
+                  <div class="activity-text">Article <strong>"History of SIMAD"</strong> was deleted</div>
+                  <div class="activity-time">3 hours ago · by Admin</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot dot-gold"></span>
+                <div class="activity-body">
+                  <div class="activity-text">Settings updated: site tagline changed</div>
+                  <div class="activity-time">Yesterday at 4:30 PM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot dot-green"></span>
+                <div class="activity-body">
+                  <div class="activity-text">New AI news item added: <strong>"ChatGPT-5 announced"</strong></div>
+                  <div class="activity-time">Yesterday at 11:00 AM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div class="card">
+              <div class="card-head"><h3>Top Categories</h3></div>
+              <div class="quick-list">
+                <div class="quick-item"><span class="quick-item-label">Technology</span><span class="quick-item-value">48</span></div>
+                <div class="quick-item"><span class="quick-item-label">Education</span><span class="quick-item-value">35</span></div>
+                <div class="quick-item"><span class="quick-item-label">Science</span><span class="quick-item-value">29</span></div>
+                <div class="quick-item"><span class="quick-item-label">AI &amp; ML</span><span class="quick-item-value">21</span></div>
+                <div class="quick-item"><span class="quick-item-label">Culture</span><span class="quick-item-value">9</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Quick Actions</h3></div>
+              <div class="quick-list" style="padding:.75rem 1.25rem;display:flex;flex-direction:column;gap:.6rem;">
+                <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="openModal('article')">
+                  <i class="fa-solid fa-plus"></i> New Article
+                </button>
+                <button class="btn btn-secondary" style="width:100%;justify-content:center;" onclick="showTab('newsletter', null)">
+                  <i class="fa-solid fa-paper-plane"></i> Send Newsletter
+                </button>
+                <button class="btn btn-secondary" style="width:100%;justify-content:center;" onclick="showTab('settings', null)">
+                  <i class="fa-solid fa-gear"></i> Site Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /DASHBOARD -->
+
+      <!-- ════════════ ARTICLES ════════════ -->
+      <div class="tab-pane" id="pane-articles">
+
+        <div class="page-header">
+          <div>
+            <h2>Articles</h2>
+            <p>Manage all published and draft articles.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('article')">
+            <i class="fa-solid fa-plus"></i> New Article
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table id="articles-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Author</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="articles-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <!-- /ARTICLES -->
+
+      <!-- ════════════ AI NEWS ════════════ -->
+      <div class="tab-pane" id="pane-ainews">
+
+        <div class="page-header">
+          <div>
+            <h2>AI News</h2>
+            <p>Curated AI and technology news items.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('ainews')">
+            <i class="fa-solid fa-plus"></i> New AI News Item
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table id="ainews-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Source</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ainews-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <!-- /AI NEWS -->
+
+      <!-- ════════════ NEWSLETTER ════════════ -->
+      <div class="tab-pane" id="pane-newsletter">
+
+        <div class="page-header">
+          <div>
+            <h2>Newsletter</h2>
+            <p>Compose and send newsletters to your subscribers.</p>
+          </div>
+        </div>
+
+        <div class="two-col" style="grid-template-columns:2fr 1fr;align-items:start;">
+          <div class="settings-card">
+            <div class="settings-head">
+              <i class="fa-solid fa-paper-plane"></i>
+              <h3>Compose Campaign</h3>
+            </div>
+            <div class="settings-body">
+              <div class="s-field">
+                <label>Subject Line</label>
+                <input type="text" placeholder="e.g. Nadaara Hub Weekly — August 2026" />
+              </div>
+              <div class="s-field">
+                <label>Preview Text</label>
+                <input type="text" placeholder="Short preview shown in inbox..." />
+              </div>
+              <div class="s-field">
+                <label>Message Body</label>
+                <textarea rows="8" placeholder="Write your newsletter content here..."></textarea>
+              </div>
+              <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+                <button class="btn btn-secondary" onclick="showToast('Draft saved', 'fa-floppy-disk')">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Draft
+                </button>
+                <button class="btn btn-primary" onclick="showToast('Newsletter sent to 1,209 subscribers!', 'fa-paper-plane')">
+                  <i class="fa-solid fa-paper-plane"></i> Send Now
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-head">
+              <i class="fa-solid fa-chart-bar"></i>
+              <h3>Subscriber Stats</h3>
+            </div>
+            <div class="quick-list">
+              <div class="quick-item"><span class="quick-item-label">Total subscribers</span><span class="quick-item-value">1,209</span></div>
+              <div class="quick-item"><span class="quick-item-label">Active</span><span class="quick-item-value">1,182</span></div>
+              <div class="quick-item"><span class="quick-item-label">Unsubscribed</span><span class="quick-item-value">27</span></div>
+              <div class="quick-item"><span class="quick-item-label">Avg open rate</span><span class="quick-item-value">41%</span></div>
+              <div class="quick-item"><span class="quick-item-label">Last sent</span><span class="quick-item-value">Aug 1</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /NEWSLETTER -->
+
+      <!-- ════════════ USERS ════════════ -->
+      <div class="tab-pane" id="pane-users">
+
+        <div class="page-header">
+          <div>
+            <h2>Users</h2>
+            <p>Manage registered accounts.</p>
+          </div>
+        </div>
+
+        <div class="placeholder-banner">
+          <i class="fa-solid fa-users-gear"></i>
+          <p><strong>Connect Firestore to manage users.</strong></p>
+          <p style="margin-top:.4rem;font-size:.8rem;">
+            Enable Firebase Firestore in firebase-config.js and uncomment the Firestore SDK script tag in this file.<br>
+            Then replace this section with a real-time user query.
+          </p>
+        </div>
+
+        <!-- Firestore placeholder — uncomment and implement:
+        const db = firebase.firestore();
+        db.collection('users').orderBy('createdAt','desc').onSnapshot(snap => {
+          // render user rows
+        });
+        -->
+
+      </div>
+      <!-- /USERS -->
+
+      <!-- ════════════ SETTINGS ════════════ -->
+      <div class="tab-pane" id="pane-settings">
+
+        <div class="page-header">
+          <div>
+            <h2>Settings</h2>
+            <p>Configure your site's global options.</p>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+          </button>
+        </div>
+
+        <div class="settings-grid">
+
+          <div class="settings-card">
+            <div class="settings-head">
+              <i class="fa-solid fa-globe"></i>
+              <h3>Site Identity</h3>
+            </div>
+            <div class="settings-body">
+              <div class="s-field">
+                <label>Site Name</label>
+                <input type="text" id="setting-sitename" value="Nadaara Hub" />
+              </div>
+              <div class="s-field">
+                <label>Tagline</label>
+                <input type="text" id="setting-tagline" value="Your gateway to knowledge and community" />
+              </div>
+              <div class="s-field">
+                <label>Admin Email</label>
+                <input type="email" id="setting-adminemail" value="admin@nadaarahub.com" />
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-head">
+              <i class="fa-solid fa-share-nodes"></i>
+              <h3>Social Links</h3>
+            </div>
+            <div class="settings-body">
+              <div class="s-field">
+                <label>Twitter / X</label>
+                <div class="social-row">
+                  <i class="fa-brands fa-x-twitter"></i>
+                  <input type="url" placeholder="https://twitter.com/nadaarahub" />
+                </div>
+              </div>
+              <div class="s-field">
+                <label>LinkedIn</label>
+                <div class="social-row">
+                  <i class="fa-brands fa-linkedin"></i>
+                  <input type="url" placeholder="https://linkedin.com/company/nadaarahub" />
+                </div>
+              </div>
+              <div class="s-field">
+                <label>Facebook</label>
+                <div class="social-row">
+                  <i class="fa-brands fa-facebook"></i>
+                  <input type="url" placeholder="https://facebook.com/nadaarahub" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card full">
+            <div class="settings-head">
+              <i class="fa-solid fa-circle-info"></i>
+              <h3>About Section</h3>
+            </div>
+            <div class="settings-body">
+              <div class="s-field">
+                <label>About Text</label>
+                <textarea rows="5" id="setting-about">Nadaara Hub is a Somali educational platform bringing together learners, teachers, and contributors. We curate courses, AI news, and expert insights to empower the next generation of Somali professionals.</textarea>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- /SETTINGS -->
+
+    </div><!-- /.content -->
+  </div><!-- /.main -->
+
+  <!-- ── Article / AI News Modal ─────────────────────────────── -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+      <div class="modal-head">
+        <h3 id="modal-heading">New Article</h3>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body" id="modal-body">
+
+        <!-- Article fields -->
+        <div class="m-field full" id="mf-title-wrap">
+          <label>Title</label>
+          <input type="text" id="mf-title" placeholder="Article title..." />
+        </div>
+        <div class="m-field" id="mf-category-wrap">
+          <label>Category</label>
+          <select id="mf-category">
+            <option value="">Select category</option>
+            <option>Technology</option>
+            <option>Education</option>
+            <option>Science</option>
+            <option>AI &amp; ML</option>
+            <option>Culture</option>
+            <option>Health</option>
+          </select>
+        </div>
+        <div class="m-field" id="mf-author-wrap">
+          <label>Author</label>
+          <input type="text" id="mf-author" placeholder="Author name..." />
+        </div>
+        <div class="m-field" id="mf-date-wrap">
+          <label>Date</label>
+          <input type="date" id="mf-date" />
+        </div>
+        <!-- AI News: Source field (hidden for article) -->
+        <div class="m-field" id="mf-source-wrap" style="display:none;">
+          <label>Source</label>
+          <input type="text" id="mf-source" placeholder="e.g. MIT Tech Review" />
+        </div>
+        <div class="m-field" id="mf-source-url-wrap" style="display:none;">
+          <label>Source URL</label>
+          <input type="url" id="mf-source-url" placeholder="https://..." />
+        </div>
+
+        <div class="m-field full">
+          <label>Summary</label>
+          <input type="text" id="mf-summary" placeholder="Short description shown in listings..." />
+        </div>
+        <div class="m-field full" id="mf-content-wrap">
+          <label>Content</label>
+          <textarea id="mf-content" rows="6" placeholder="Full article body..."></textarea>
+        </div>
+        <div class="m-field full">
+          <label>Featured Image URL</label>
+          <input type="url" id="mf-image" placeholder="https://example.com/image.jpg" />
+        </div>
+        <div class="m-field full">
+          <label class="check-row">
+            <input type="checkbox" id="mf-published" checked />
+            Published (visible to readers)
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveModal()">
+          <i class="fa-solid fa-floppy-disk"></i> Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"><i class="fa-solid fa-check-circle"></i> <span id="toast-text">Saved</span></div>
+
+  <!-- Firebase config -->
+  <script src="firebase-config.js"></script>
+
+  <script>
+    // ── Auth guard ────────────────────────────────────────────
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const role = localStorage.getItem('nadaara_role');
+      if (role !== 'admin') {
+        window.location.href = 'login.html';
+        return;
+      }
+      // Populate admin info
+      const name = localStorage.getItem('nadaara_name') || user.email;
+      document.getElementById('admin-name-display').textContent = name;
+      const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('admin-initials').textContent = initials;
+    });
+
+    // ── Sample data ───────────────────────────────────────────
+    const ARTICLES = [
+      { id:1, title:'AI in Somali Education: A New Era',          category:'AI & ML',    author:'Dr. Hassan Omar',   date:'2026-08-05', published:true  },
+      { id:2, title:'SIMAD University Tops Regional Rankings',    category:'Education',   author:'Leyla Ahmed',       date:'2026-07-28', published:true  },
+      { id:3, title:'Building Resilient Tech Ecosystems',         category:'Technology',  author:'Mohamed Farah',     date:'2026-07-20', published:false },
+      { id:4, title:'Climate Science and the Horn of Africa',     category:'Science',     author:'Amina Warsame',     date:'2026-07-15', published:true  },
+      { id:5, title:'Preserving Somali Cultural Heritage Online', category:'Culture',     author:'Faadumo Daud',      date:'2026-07-10', published:true  },
+      { id:6, title:'Health Tech in East Africa',                 category:'Health',      author:'Dr. Abdi Ali',      date:'2026-07-02', published:false },
+    ];
+
+    const AI_NEWS = [
+      { id:1, title:'GPT-5 Released with Native Multimodal Reasoning', source:'OpenAI Blog',      date:'2026-08-06', published:true  },
+      { id:2, title:'Google DeepMind AlphaFold 3 Predicts Drug Targets', source:'Nature',         date:'2026-07-30', published:true  },
+      { id:3, title:'EU AI Act Enters Full Enforcement Phase',          source:'Reuters',          date:'2026-07-18', published:true  },
+      { id:4, title:'Meta Releases Llama 4 Under Open License',         source:'MIT Tech Review',  date:'2026-07-05', published:false },
+    ];
+
+    // ── Render tables ─────────────────────────────────────────
+    function renderArticles() {
+      const tbody = document.getElementById('articles-tbody');
+      tbody.innerHTML = ARTICLES.map(a => `
+        <tr>
+          <td><strong>${escHtml(a.title)}</strong></td>
+          <td>${escHtml(a.category)}</td>
+          <td>${escHtml(a.author)}</td>
+          <td>${a.date}</td>
+          <td><span class="badge ${a.published ? 'badge-published' : 'badge-draft'}">${a.published ? 'Published' : 'Draft'}</span></td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-icon" title="Edit" onclick="editArticle(${a.id})"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn-icon del" title="Delete" onclick="deleteArticle(${a.id})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAiNews() {
+      const tbody = document.getElementById('ainews-tbody');
+      tbody.innerHTML = AI_NEWS.map(a => `
+        <tr>
+          <td><strong>${escHtml(a.title)}</strong></td>
+          <td>${escHtml(a.source)}</td>
+          <td>${a.date}</td>
+          <td><span class="badge ${a.published ? 'badge-published' : 'badge-draft'}">${a.published ? 'Published' : 'Draft'}</span></td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-icon" title="Edit" onclick="editAiNews(${a.id})"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn-icon del" title="Delete" onclick="deleteAiNews(${a.id})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    renderArticles();
+    renderAiNews();
+
+    // ── Tab switching ─────────────────────────────────────────
+    const tabTitles = {
+      dashboard:'Dashboard', articles:'Articles', ainews:'AI News',
+      newsletter:'Newsletter', users:'Users', settings:'Settings'
+    };
+
+    function showTab(name, btn) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById('pane-' + name).classList.add('active');
+      if (btn) btn.classList.add('active');
+      document.getElementById('topbar-title').textContent = tabTitles[name] || name;
+    }
+
+    // ── Modal (Article) ───────────────────────────────────────
+    let modalMode = 'article'; // 'article' | 'ainews'
+    let editingId = null;
+
+    function openModal(mode, data) {
+      modalMode = mode || 'article';
+      editingId = data ? data.id : null;
+
+      const isAi = modalMode === 'ainews';
+      document.getElementById('modal-heading').textContent = editingId
+        ? (isAi ? 'Edit AI News Item' : 'Edit Article')
+        : (isAi ? 'New AI News Item' : 'New Article');
+
+      // Show/hide fields
+      ['mf-category-wrap','mf-author-wrap','mf-content-wrap'].forEach(id => {
+        document.getElementById(id).style.display = isAi ? 'none' : '';
+      });
+      ['mf-source-wrap','mf-source-url-wrap'].forEach(id => {
+        document.getElementById(id).style.display = isAi ? '' : 'none';
+      });
+
+      // Pre-fill if editing
+      if (data) {
+        document.getElementById('mf-title').value     = data.title     || '';
+        document.getElementById('mf-date').value      = data.date      || '';
+        document.getElementById('mf-summary').value   = data.summary   || '';
+        document.getElementById('mf-published').checked = data.published !== false;
+        if (!isAi) {
+          document.getElementById('mf-category').value = data.category || '';
+          document.getElementById('mf-author').value   = data.author   || '';
+          document.getElementById('mf-content').value  = data.content  || '';
+          document.getElementById('mf-image').value    = data.image    || '';
+        } else {
+          document.getElementById('mf-source').value     = data.source     || '';
+          document.getElementById('mf-source-url').value = data.sourceUrl  || '';
+        }
+      } else {
+        document.getElementById('modal-body').querySelectorAll('input,textarea,select').forEach(el => {
+          if (el.type === 'checkbox') el.checked = true;
+          else el.value = '';
+        });
+        document.getElementById('mf-date').value = new Date().toISOString().split('T')[0];
+      }
+
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      editingId = null;
+    }
+
+    function saveModal() {
+      const title = document.getElementById('mf-title').value.trim();
+      if (!title) { alert('Please enter a title.'); return; }
+
+      if (editingId) {
+        showToast('Item updated successfully', 'fa-floppy-disk');
+      } else {
+        showToast('Item created successfully', 'fa-circle-check');
+      }
+
+      // Firestore placeholder — uncomment to save to Firestore:
+      /*
+      const db = firebase.firestore();
+      const col = modalMode === 'ainews' ? 'ainews' : 'articles';
+      const payload = {
+        title,
+        date: document.getElementById('mf-date').value,
+        summary: document.getElementById('mf-summary').value,
+        published: document.getElementById('mf-published').checked,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      if (editingId) {
+        db.collection(col).doc(String(editingId)).update(payload);
+      } else {
+        db.collection(col).add({ ...payload, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      }
+      */
+
+      closeModal();
+    }
+
+    // ── Edit / Delete handlers ────────────────────────────────
+    function editArticle(id) {
+      const a = ARTICLES.find(x => x.id === id);
+      if (a) openModal('article', a);
+    }
+
+    function deleteArticle(id) {
+      if (!confirm('Delete this article? This cannot be undone.')) return;
+      const idx = ARTICLES.findIndex(x => x.id === id);
+      if (idx !== -1) ARTICLES.splice(idx, 1);
+      renderArticles();
+      showToast('Article deleted', 'fa-trash');
+    }
+
+    function editAiNews(id) {
+      const a = AI_NEWS.find(x => x.id === id);
+      if (a) openModal('ainews', a);
+    }
+
+    function deleteAiNews(id) {
+      if (!confirm('Delete this item? This cannot be undone.')) return;
+      const idx = AI_NEWS.findIndex(x => x.id === id);
+      if (idx !== -1) AI_NEWS.splice(idx, 1);
+      renderAiNews();
+      showToast('Item deleted', 'fa-trash');
+    }
+
+    // ── Settings ──────────────────────────────────────────────
+    function saveSettings() {
+      const sitename = document.getElementById('setting-sitename').value;
+      localStorage.setItem('nadaara_sitename', sitename);
+      showToast('Settings saved', 'fa-floppy-disk');
+    }
+
+    // ── Toast ─────────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg, icon) {
+      const t = document.getElementById('toast');
+      t.querySelector('i').className = 'fa-solid ' + (icon || 'fa-check-circle');
+      document.getElementById('toast-text').textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── Logout ────────────────────────────────────────────────
+    function adminLogout() {
+      auth.signOut().then(() => {
+        localStorage.removeItem('nadaara_role');
+        localStorage.removeItem('nadaara_email');
+        localStorage.removeItem('nadaara_name');
+        localStorage.removeItem('nadaara_uid');
+        window.location.href = 'login.html';
+      });
+    }
+
+    // Close modal on overlay click
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>

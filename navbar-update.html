@@ -1,0 +1,289 @@
+<!--
+=================================================================
+  NADAARA HUB — NAVBAR AUTH UPDATE
+  Copy the <style> block into your existing style.css, and
+  replace the existing <header>/<nav> in home.html, About.html,
+  Teachers.html, Courses.html, and Contacts.html with the
+  <header> block below.
+=================================================================
+
+────────────────────────────────────────────────────────────────
+  1.  ADD TO style.css  (or a <style> block in each page)
+────────────────────────────────────────────────────────────────
+
+/* ── Nadaara Hub Navbar (Auth-aware) ── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+  --navy-deep: #0a1628;
+  --gold:      #f0a500;
+}
+
+* { box-sizing: border-box; }
+
+.nh-navbar {
+  position: sticky;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 64px;
+  background: var(--navy-deep);
+  font-family: 'Poppins', system-ui, sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+
+.nh-logo {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+}
+
+.nh-logo-icon {
+  width: 34px; height: 34px;
+  background: var(--gold);
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  color: var(--navy-deep);
+  font-size: .95rem;
+}
+
+.nh-logo-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nh-logo-name span { color: var(--gold); }
+
+.nh-links {
+  display: flex;
+  list-style: none;
+  gap: .25rem;
+  margin: 0; padding: 0;
+}
+
+.nh-links a {
+  display: block;
+  padding: .45rem .9rem;
+  border-radius: 6px;
+  color: rgba(255,255,255,.72);
+  font-size: .875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+
+.nh-links a:hover,
+.nh-links a.active { background: rgba(255,255,255,.08); color: #fff; }
+
+.nh-links a.active { color: var(--gold); }
+
+.nh-right { display: flex; align-items: center; gap: .75rem; }
+
+/* Guest state: Login button */
+.nh-btn-login {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .48rem 1.1rem;
+  background: var(--gold);
+  color: var(--navy-deep) !important;
+  border-radius: 7px;
+  font-size: .875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+
+.nh-btn-login:hover { opacity: .88; text-decoration: none; color: var(--navy-deep) !important; }
+
+/* Logged-in state: Avatar dropdown */
+.nh-user { position: relative; }
+
+.nh-user-btn {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .35rem .35rem .35rem .75rem;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  cursor: pointer;
+  color: #fff;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: .8125rem;
+  font-weight: 500;
+  transition: background .2s;
+}
+
+.nh-user-btn:hover { background: rgba(255,255,255,.14); }
+
+.nh-avatar {
+  width: 30px; height: 30px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--navy-deep);
+  font-weight: 700;
+  font-size: .75rem;
+}
+
+.nh-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + .5rem);
+  right: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #e2e8f4;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(10,22,40,.15);
+  overflow: hidden;
+  z-index: 999;
+}
+
+.nh-user.open .nh-dropdown { display: block; }
+
+.nh-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .7rem 1rem;
+  font-size: .85rem;
+  color: #0a1628;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Poppins', system-ui, sans-serif;
+  transition: background .15s;
+}
+
+.nh-dropdown-item:hover { background: #f4f6fb; }
+.nh-dropdown-item i { width: 16px; color: #64748b; }
+
+.nh-dropdown-divider { height: 1px; background: #e2e8f4; margin: .25rem 0; }
+
+.nh-dropdown-item.logout { color: #ef4444; }
+.nh-dropdown-item.logout i { color: #ef4444; }
+
+
+────────────────────────────────────────────────────────────────
+  2.  REPLACE THE <header> IN EACH PAGE
+      (Change href="home.html" to the current page's active link)
+────────────────────────────────────────────────────────────────
+-->
+
+<!-- Add Font Awesome and Firebase scripts to every page <head>: -->
+<!--
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+-->
+
+<!-- Replace <header> with this: -->
+<header class="nh-navbar">
+  <a href="home.html" class="nh-logo">
+    <span class="nh-logo-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+    <span class="nh-logo-name">Nadaara <span>Hub</span></span>
+  </a>
+
+  <ul class="nh-links">
+    <li><a href="home.html"     class="active">Home</a></li>  <!-- remove "active" class on other pages -->
+    <li><a href="About.html">About</a></li>
+    <li><a href="Teachers.html">Teachers</a></li>
+    <li><a href="Courses.html">Courses</a></li>
+    <li><a href="Contacts.html">Contact</a></li>
+  </ul>
+
+  <div class="nh-right">
+    <!-- Guest state (shown when not logged in) -->
+    <a href="login.html" class="nh-btn-login" id="nh-login-btn">
+      <i class="fa-solid fa-right-to-bracket"></i> Sign In
+    </a>
+
+    <!-- Logged-in state (hidden until auth confirmed) -->
+    <div class="nh-user" id="nh-user-menu" style="display:none;">
+      <button class="nh-user-btn" onclick="toggleUserMenu()" aria-haspopup="true" aria-expanded="false" id="nh-user-toggle">
+        <div class="nh-avatar" id="nh-avatar">U</div>
+        <span id="nh-username">User</span>
+        <i class="fa-solid fa-chevron-down" style="font-size:.7rem;color:rgba(255,255,255,.5);"></i>
+      </button>
+      <div class="nh-dropdown" id="nh-dropdown">
+        <a href="#" class="nh-dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
+        <a href="admin.html" class="nh-dropdown-item" id="nh-admin-link" style="display:none;">
+          <i class="fa-solid fa-gauge"></i> Admin Panel
+        </a>
+        <div class="nh-dropdown-divider"></div>
+        <button class="nh-dropdown-item logout" onclick="nhLogout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Auth-aware navbar script — place before </body> on every page -->
+<script>
+(function() {
+  // Wait for Firebase to be ready
+  if (typeof firebase === 'undefined') return;
+  const auth = firebase.auth();
+
+  auth.onAuthStateChanged(function(user) {
+    const loginBtn  = document.getElementById('nh-login-btn');
+    const userMenu  = document.getElementById('nh-user-menu');
+    const adminLink = document.getElementById('nh-admin-link');
+    const avatar    = document.getElementById('nh-avatar');
+    const username  = document.getElementById('nh-username');
+
+    if (user) {
+      // Logged in
+      loginBtn.style.display  = 'none';
+      userMenu.style.display  = 'block';
+      const name = localStorage.getItem('nadaara_name') || user.displayName || user.email.split('@')[0];
+      const role = localStorage.getItem('nadaara_role') || 'reader';
+      username.textContent    = name;
+      avatar.textContent      = name.slice(0,2).toUpperCase();
+      if (role === 'admin') adminLink.style.display = 'flex';
+    } else {
+      // Guest
+      loginBtn.style.display  = 'inline-flex';
+      userMenu.style.display  = 'none';
+    }
+  });
+
+  window.toggleUserMenu = function() {
+    const menu   = document.getElementById('nh-user-menu');
+    const toggle = document.getElementById('nh-user-toggle');
+    const isOpen = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  };
+
+  // Close dropdown on outside click
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('nh-user-menu');
+    if (menu && !menu.contains(e.target)) menu.classList.remove('open');
+  });
+
+  window.nhLogout = function() {
+    auth.signOut().then(function() {
+      localStorage.removeItem('nadaara_role');
+      localStorage.removeItem('nadaara_name');
+      localStorage.removeItem('nadaara_email');
+      localStorage.removeItem('nadaara_uid');
+      window.location.href = 'login.html';
+    });
+  };
+})();
+</script>
