@@ -81,18 +81,60 @@ function showToast(message) {
   });
 }
 
-function subscribeNewsletter(e) {
+async function subscribeNewsletter(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
-  const originalText = btn.innerHTML;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing…';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
-    btn.style.background = 'linear-gradient(135deg,#28a745,#20c997)';
-    showToast('Welcome to Nadaara Hub! Check your inbox for confirmation.');
-    setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; btn.style.background = ''; e.target.reset(); }, 4000);
-  }, 1500);
+  const form = e.target;
+  const btn = form.querySelector('button[type="submit"]') || document.getElementById('nl-submit-btn');
+  const alertEl = document.getElementById('nl-alert');
+  const emailEl = form.querySelector('input[type="email"]') || document.getElementById('nl-email');
+  const nameEl = form.querySelector('input[type="text"]') || document.getElementById('nl-name');
+  const email = emailEl ? emailEl.value.trim() : '';
+  const name = nameEl ? nameEl.value.trim() : '';
+
+  if (!email) return;
+
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing…'; btn.disabled = true; }
+
+  function showNlAlert(msg, ok) {
+    if (alertEl) {
+      alertEl.textContent = msg;
+      alertEl.style.display = 'block';
+      alertEl.style.background = ok ? 'rgba(40,167,69,.15)' : 'rgba(220,53,69,.15)';
+      alertEl.style.color = ok ? '#28a745' : '#dc3545';
+      alertEl.style.border = ok ? '1px solid #28a74540' : '1px solid #dc354540';
+    }
+  }
+
+  try {
+    if (typeof db !== 'undefined') {
+      const { error } = await db.from('newsletter_subscribers').insert({ email, name: name || null });
+      if (error) {
+        if (error.code === '23505') {
+          showNlAlert('You are already subscribed. Thank you!', true);
+          showToast('Already subscribed!');
+        } else {
+          throw new Error(error.message);
+        }
+      } else {
+        showNlAlert('Welcome aboard! You will receive our next edition on Thursday.', true);
+        showToast('Subscribed to Nadaara Hub!');
+        form.reset();
+      }
+    } else {
+      await new Promise(r => setTimeout(r, 1200));
+      showNlAlert('Subscribed! Check your inbox for a welcome email.', true);
+      showToast('Welcome to Nadaara Hub!');
+      form.reset();
+    }
+  } catch (err) {
+    showNlAlert('Could not subscribe right now. Please try again.', false);
+    showToast('Subscription failed — please try again.');
+  } finally {
+    if (btn) {
+      setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000);
+    }
+  }
 }
 
 function toggleTopic(el) { el.classList.toggle('active'); }

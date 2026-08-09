@@ -16,7 +16,7 @@
     <div class="nav-container">
       <a href="index.html" class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></a>
       <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="newsletter.html" class="active">Newsletter</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
-      <div class="nav-actions"><button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button><a href="newsletter.html" class="btn-subscribe">Subscribe</a><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div>
+      <div class="nav-actions"><button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button><a href="newsletter.html" class="btn-subscribe">Subscribe</a><a href="login.html" class="btn-signin"><i class="fas fa-user"></i> Sign In</a><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div>
     </div>
     <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search…" id="searchInput" /><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
   </nav>
@@ -49,11 +49,12 @@
           <div class="nl-form-card">
             <div class="nl-form-icon"><i class="fas fa-paper-plane"></i></div>
             <h3>Subscribe Now — It's Free</h3>
+            <p id="nl-alert" style="display:none;padding:.6rem 1rem;border-radius:8px;font-size:.9rem;margin-bottom:1rem;"></p>
             <form onsubmit="subscribeNewsletter(event)" class="nl-big-form">
-              <div class="form-group"><label>First Name</label><input type="text" placeholder="e.g. Fatima" required /></div>
-              <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required /></div>
-              <div class="form-group"><label>How often?</label><select><option value="weekly">Weekly (Every Thursday)</option><option value="biweekly">Bi-weekly</option><option value="daily">Daily Briefing</option></select></div>
-              <button type="submit" class="btn-primary full-width"><i class="fas fa-paper-plane"></i> Subscribe Free</button>
+              <div class="form-group"><label>First Name</label><input type="text" id="nl-name" placeholder="e.g. Fatima" required /></div>
+              <div class="form-group"><label>Email Address</label><input type="email" id="nl-email" placeholder="you@example.com" required /></div>
+              <div class="form-group"><label>How often?</label><select id="nl-freq"><option value="weekly">Weekly (Every Thursday)</option><option value="biweekly">Bi-weekly</option><option value="daily">Daily Briefing</option></select></div>
+              <button type="submit" class="btn-primary full-width" id="nl-submit-btn"><i class="fas fa-paper-plane"></i> Subscribe Free</button>
               <p class="newsletter-note"><i class="fas fa-lock"></i> We respect your privacy. No spam, ever.</p>
             </form>
           </div>
@@ -74,7 +75,9 @@
       </div>
     </div>
   </section>
-  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li>hello@nadaara.com</li><li>Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p></div></div></footer>
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p><div class="footer-social"><a href="https://www.facebook.com/NadaaraHub" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a><a href="https://www.tiktok.com/@NadaaraHub" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a><a href="https://www.linkedin.com/company/NadaaraHub" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a></div></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="login.html">Sign In</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><i class="fas fa-envelope"></i> nadaarahub@gmail.com</li><li><i class="fas fa-phone"></i> +252 611 009 344</li><li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div></div></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
