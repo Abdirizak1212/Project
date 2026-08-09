@@ -106,19 +106,31 @@ async function subscribeNewsletter(e) {
     alertEl.style.marginBottom = '1rem';
   }
 
+  /* grab optional fields from the form if present */
+  const freqEl  = form.querySelector('select');
+  const frequency = freqEl ? freqEl.value : 'weekly';
+
   try {
     if (typeof db !== 'undefined') {
-      const { error } = await db.from('newsletter_subscribers').insert({
-        email:  email,
-        name:   name || null,
-        active: true
+      /* try full insert first; fall back to email-only if columns mismatch */
+      let result = await db.from('newsletter_subscribers').insert({
+        email:     email,
+        name:      name || null,
+        frequency: frequency || 'weekly',
+        active:    true
       });
-      if (error) {
-        if (error.code === '23505') {
+
+      if (result.error && result.error.code !== '23505') {
+        /* retry with minimal fields in case table has fewer columns */
+        result = await db.from('newsletter_subscribers').insert({ email: email });
+      }
+
+      if (result.error) {
+        if (result.error.code === '23505') {
           showNlAlert('You are already subscribed — thank you!', true);
           showToast('Already subscribed!');
         } else {
-          throw new Error(error.message);
+          throw new Error(result.error.message);
         }
       } else {
         showNlAlert('You are subscribed! Welcome to Nadaara Hub.', true);
@@ -132,7 +144,7 @@ async function subscribeNewsletter(e) {
       form.reset();
     }
   } catch (err) {
-    showNlAlert('Could not subscribe right now — please try again in a moment.', false);
+    showNlAlert('Subscription failed: ' + err.message, false);
   } finally {
     if (btn) setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3500);
   }
