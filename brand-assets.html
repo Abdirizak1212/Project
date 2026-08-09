@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nadaara Hub – Brand Assets</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0a1628;color:#e8ecf0;min-height:100vh;padding:40px 20px}
+h1{text-align:center;color:#f0a500;font-size:1.6rem;margin-bottom:6px}
+.sub{text-align:center;color:#8892a4;font-size:.88rem;margin-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;max-width:1000px;margin:0 auto}
+.asset-card{background:#112240;border:1px solid #1e3055;border-radius:14px;padding:24px;text-align:center}
+.asset-card h3{color:#f0a500;font-size:.95rem;font-weight:600;margin-bottom:4px}
+.asset-card p{color:#8892a4;font-size:.78rem;margin-bottom:16px}
+canvas{border-radius:10px;max-width:100%;display:block;margin:0 auto 16px}
+.btn-dl{display:inline-flex;align-items:center;gap:8px;background:#f0a500;color:#0a1628;padding:10px 22px;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none;cursor:pointer;border:none;font-family:inherit;transition:.2s}
+.btn-dl:hover{background:#ffc533}
+</style>
+</head>
+<body>
+<h1>Nadaara Hub — Brand Assets</h1>
+<p class="sub">Click the download buttons below to save your logo and cover photo</p>
+
+<div class="grid">
+
+  <!-- LOGO 512x512 -->
+  <div class="asset-card">
+    <h3>Logo</h3>
+    <p>512 × 512 px &nbsp;·&nbsp; PNG &nbsp;·&nbsp; For Google Business, social media profiles</p>
+    <canvas id="logo" width="512" height="512"></canvas>
+    <button class="btn-dl" onclick="download('logo','nadaara-hub-logo.png')">&#8595; Download Logo PNG</button>
+  </div>
+
+  <!-- COVER 1080x608 -->
+  <div class="asset-card">
+    <h3>Cover Photo</h3>
+    <p>1080 × 608 px &nbsp;·&nbsp; PNG &nbsp;·&nbsp; For Google Business cover, Facebook, LinkedIn</p>
+    <canvas id="cover" width="1080" height="608" style="width:100%"></canvas>
+    <button class="btn-dl" onclick="download('cover','nadaara-hub-cover.png')">&#8595; Download Cover PNG</button>
+  </div>
+
+  <!-- SQUARE SOCIAL 1080x1080 -->
+  <div class="asset-card">
+    <h3>Square Social Card</h3>
+    <p>1080 × 1080 px &nbsp;·&nbsp; PNG &nbsp;·&nbsp; Instagram, WhatsApp status, Twitter</p>
+    <canvas id="square" width="1080" height="1080" style="width:100%"></canvas>
+    <button class="btn-dl" onclick="download('square','nadaara-hub-social.png')">&#8595; Download Square PNG</button>
+  </div>
+
+  <!-- FAVICON 32x32 -->
+  <div class="asset-card">
+    <h3>Favicon / App Icon</h3>
+    <p>192 × 192 px &nbsp;·&nbsp; PNG &nbsp;·&nbsp; Browser tab icon, app icon</p>
+    <canvas id="favicon" width="192" height="192"></canvas>
+    <button class="btn-dl" onclick="download('favicon','nadaara-hub-favicon.png')">&#8595; Download Favicon PNG</button>
+  </div>
+
+</div>
+
+<script>
+function hexPath(ctx, cx, cy, r) {
+  // flat-top hexagon matching CSS clip-path polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);           // top
+  ctx.lineTo(cx + r, cy - r * 0.5); // top-right
+  ctx.lineTo(cx + r, cy + r * 0.5); // bottom-right
+  ctx.lineTo(cx, cy + r);           // bottom
+  ctx.lineTo(cx - r, cy + r * 0.5); // bottom-left
+  ctx.lineTo(cx - r, cy - r * 0.5); // top-left
+  ctx.closePath();
+}
+
+// ── LOGO 512×512 ─────────────────────────────────────────────
+(function(){
+  var c = document.getElementById('logo');
+  var ctx = c.getContext('2d');
+  var W = 512, H = 512;
+
+  // Background
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle radial glow
+  var glow = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, 240);
+  glow.addColorStop(0, 'rgba(240,165,0,0.08)');
+  glow.addColorStop(1, 'rgba(240,165,0,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  // Gold hexagon
+  var cx = W/2, cy = H/2, r = 175;
+  hexPath(ctx, cx, cy, r);
+  var hexGrad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+  hexGrad.addColorStop(0, '#ffc533');
+  hexGrad.addColorStop(1, '#c8860a');
+  ctx.fillStyle = hexGrad;
+  ctx.fill();
+
+  // Letter N
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 220px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('N', cx, cy + 8);
+})();
+
+// ── COVER 1080×608 ────────────────────────────────────────────
+(function(){
+  var c = document.getElementById('cover');
+  var ctx = c.getContext('2d');
+  var W = 1080, H = 608;
+
+  // Background gradient
+  var bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0a1628');
+  bg.addColorStop(0.5, '#112240');
+  bg.addColorStop(1, '#0a1628');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid lines (subtle)
+  ctx.strokeStyle = 'rgba(240,165,0,0.05)';
+  ctx.lineWidth = 1;
+  for(var x = 0; x < W; x += 60){
+    ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
+  }
+  for(var y = 0; y < H; y += 60){
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+  }
+
+  // Gold top border
+  ctx.fillStyle = '#f0a500';
+  ctx.fillRect(0, 0, W, 4);
+
+  // Left section — hexagon
+  var hx = 220, hy = H/2, hr = 110;
+  hexPath(ctx, hx, hy, hr);
+  var hexGrad = ctx.createLinearGradient(hx-hr, hy-hr, hx+hr, hy+hr);
+  hexGrad.addColorStop(0, '#ffc533');
+  hexGrad.addColorStop(1, '#c8860a');
+  ctx.fillStyle = hexGrad;
+  ctx.fill();
+
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 130px "Segoe UI", Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('N', hx, hy + 5);
+
+  // Right section — text
+  var tx = 390;
+
+  // NADAARA
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 88px "Segoe UI", Arial';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('NADAARA', tx, H/2 - 10);
+
+  // HUB in gold
+  ctx.fillStyle = '#f0a500';
+  ctx.font = 'bold 88px "Segoe UI", Arial';
+  var nadW = ctx.measureText('NADAARA ').width;
+  ctx.fillText('HUB', tx + nadW - 10, H/2 - 10);
+
+  // Tagline
+  ctx.fillStyle = '#8892a4';
+  ctx.font = '28px "Segoe UI", Arial';
+  ctx.fillText("Somalia's AI & Innovation Platform", tx, H/2 + 50);
+
+  // Divider line
+  ctx.strokeStyle = '#f0a500';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(tx, H/2 - 60);
+  ctx.lineTo(tx, H/2 + 70);
+  ctx.stroke();
+
+  // Website
+  ctx.fillStyle = 'rgba(240,165,0,0.5)';
+  ctx.font = '22px "Segoe UI", Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('nadaarahub.com', tx, H/2 + 100);
+
+  // Gold bottom border
+  ctx.fillStyle = '#f0a500';
+  ctx.fillRect(0, H - 4, W, 4);
+})();
+
+// ── SQUARE 1080×1080 ─────────────────────────────────────────
+(function(){
+  var c = document.getElementById('square');
+  var ctx = c.getContext('2d');
+  var W = 1080, H = 1080;
+
+  var bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0a1628');
+  bg.addColorStop(1, '#112240');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Glow
+  var glow = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, 450);
+  glow.addColorStop(0, 'rgba(240,165,0,0.1)');
+  glow.addColorStop(1, 'rgba(240,165,0,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  // Borders
+  ctx.fillStyle = '#f0a500';
+  ctx.fillRect(0,0,W,5);
+  ctx.fillRect(0,H-5,W,5);
+  ctx.fillRect(0,0,5,H);
+  ctx.fillRect(W-5,0,5,H);
+
+  // Hexagon
+  var cx = W/2, cy = H/2 - 60, r = 220;
+  hexPath(ctx, cx, cy, r);
+  var hg = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
+  hg.addColorStop(0,'#ffc533');
+  hg.addColorStop(1,'#c8860a');
+  ctx.fillStyle = hg;
+  ctx.fill();
+
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 260px "Segoe UI", Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('N', cx, cy + 10);
+
+  // NADAARA HUB
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 90px "Segoe UI", Arial';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('NADAARA', cx - 108, cy + r + 100);
+
+  ctx.fillStyle = '#f0a500';
+  ctx.fillText('HUB', cx + 200, cy + r + 100);
+
+  // Tagline
+  ctx.fillStyle = '#8892a4';
+  ctx.font = '36px "Segoe UI", Arial';
+  ctx.fillText("Somalia's AI & Innovation Platform", cx, cy + r + 165);
+
+  // URL
+  ctx.fillStyle = 'rgba(240,165,0,0.6)';
+  ctx.font = '28px "Segoe UI", Arial';
+  ctx.fillText('nadaarahub.com', cx, cy + r + 215);
+})();
+
+// ── FAVICON 192×192 ──────────────────────────────────────────
+(function(){
+  var c = document.getElementById('favicon');
+  var ctx = c.getContext('2d');
+  var W = 192, H = 192;
+
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(0, 0, W, H);
+
+  var hg = ctx.createLinearGradient(0,0,W,H);
+  hg.addColorStop(0,'#ffc533');
+  hg.addColorStop(1,'#c8860a');
+  hexPath(ctx, W/2, H/2, 80);
+  ctx.fillStyle = hg;
+  ctx.fill();
+
+  ctx.fillStyle = '#0a1628';
+  ctx.font = 'bold 100px "Segoe UI", Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('N', W/2, H/2 + 4);
+})();
+
+function download(canvasId, filename) {
+  var canvas = document.getElementById(canvasId);
+  var link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+</body>
+</html>
