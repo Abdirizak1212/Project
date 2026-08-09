@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In – Nadaara Hub</title>
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex,nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -107,27 +104,122 @@ select option{background:var(--navy-mid)}
     </div>
   </div>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>
-<script src="supabase-config.js"><\/script>
-<script src="security.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="security.js"></script>
 <script>
 'use strict';
-var countdownTimer=null;
-(function(){var r=NHSec.checkRate();if(!r.allowed)showLockout(r.mins);})();
-db.auth.getSession().then(function(res){if(res.data.session)afterAuth(res.data.session);});
+var countdownTimer = null;
+
+// All functions defined first so onclick handlers always find them
+function switchTab(i) {
+  document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',i===j);});
+  document.querySelectorAll('.pane').forEach(function(p,j){p.classList.toggle('on',i===j);});
+  hideAlert();
+}
 function showAlert(msg,type){var el=document.getElementById('alert');el.textContent=msg;el.className='alert '+(type||'err');}
 function hideAlert(){document.getElementById('alert').className='alert';}
 function setBusy(id,busy,label){var btn=document.getElementById(id);btn.disabled=busy;btn.innerHTML=busy?'<span class="spin"></span> Please wait…':label;}
 function toggleEye(id,btn){var el=document.getElementById(id);var show=el.type==='password';el.type=show?'text':'password';btn.querySelector('i').className='fa fa-eye'+(show?'-slash':'');}
-function switchTab(i){document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',i===j);});document.querySelectorAll('.pane').forEach(function(p,j){p.classList.toggle('on',i===j);});hideAlert();}
-function showLockout(mins){document.getElementById('lockout-screen').style.display='block';document.getElementById('pane0').style.display='none';document.getElementById('pane1').style.display='none';var secs=mins*60;clearInterval(countdownTimer);countdownTimer=setInterval(function(){secs--;if(secs<=0){clearInterval(countdownTimer);location.reload();return;}var m=Math.floor(secs/60);var s=secs%60;document.getElementById('countdown').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;},1000);}
-async function afterAuth(session){NHSec.clearRate();var user=session.user;var isAdmin=user.email===ADMIN_EMAIL;var role=isAdmin?'admin':((user.user_metadata&&user.user_metadata.role)||'reader');try{await db.from('profiles').upsert({id:user.id,full_name:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],role:role,avatar_url:(user.user_metadata&&user.user_metadata.avatar_url)||null},{onConflict:'id'});}catch(e){}window.location.replace(isAdmin?'_nh_ctrl_panel.html':'index.html');}
-async function doLogin(e){e.preventDefault();hideAlert();if(NHSec.honeyFilled('nh_username'))return;var r=NHSec.checkRate();if(!r.allowed){showLockout(r.mins);return;}var email=NHSec.sanitize(document.getElementById('li-email').value);var password=document.getElementById('li-pw').value;if(!NHSec.validEmail(email)){showAlert('Please enter a valid email address.');return;}setBusy('li-btn',true,'Sign In');var res=await db.auth.signInWithPassword({email:email,password:password});if(res.error){NHSec.recordFail();var r2=NHSec.checkRate();if(!r2.allowed){showLockout(r2.mins);return;}showAlert(friendly(res.error.message));setBusy('li-btn',false,'Sign In');return;}await afterAuth(res.data.session);}
-async function doSignup(e){e.preventDefault();hideAlert();if(NHSec.honeyFilled('nh_website'))return;var name=NHSec.sanitize(document.getElementById('su-name').value);var email=NHSec.sanitize(document.getElementById('su-email').value);var pw=document.getElementById('su-pw').value;var pw2=document.getElementById('su-pw2').value;var role=document.getElementById('su-role').value;if(!NHSec.validEmail(email)){showAlert('Please enter a valid email address.');return;}if(pw!==pw2){showAlert('Passwords do not match.');return;}if(pw.length<8){showAlert('Password must be at least 8 characters.');return;}setBusy('su-btn',true,'Create Account');var res=await db.auth.signUp({email:email,password:pw,options:{data:{full_name:name,role:role}}});if(res.error){showAlert(friendly(res.error.message));setBusy('su-btn',false,'Create Account');return;}if(res.data.session){await afterAuth(res.data.session);return;}showAlert('Account created! Check your email to confirm, then sign in.','ok');setBusy('su-btn',false,'Create Account');}
-async function doGoogle(){hideAlert();var res=await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://abdirizak1212.github.io/Project/_nh_ctrl_panel.html'}});if(res.error)showAlert(friendly(res.error.message));}
-async function doReset(e){e.preventDefault();var email=NHSec.sanitize(document.getElementById('li-email').value);if(!email||!NHSec.validEmail(email)){showAlert('Enter your email address above first.');return;}var res=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://abdirizak1212.github.io/Project/login.html'});if(res.error){showAlert(friendly(res.error.message));return;}showAlert('Password reset email sent. Check your inbox.','ok');}
-function friendly(msg){if(!msg)return'Something went wrong.';if(msg.includes('Invalid login')||msg.includes('invalid_credentials'))return'Incorrect email or password.';if(msg.includes('Email not confirmed'))return'Please confirm your email first.';if(msg.includes('already registered'))return'This email is already registered.';if(msg.includes('weak')||msg.includes('password'))return'Password must be at least 8 characters.';if(msg.includes('rate limit'))return'Too many requests. Please wait.';return'Something went wrong. Please try again.';}
+function showLockout(mins){
+  document.getElementById('lockout-screen').style.display='block';
+  document.getElementById('pane0').style.display='none';
+  document.getElementById('pane1').style.display='none';
+  var secs=mins*60;
+  clearInterval(countdownTimer);
+  countdownTimer=setInterval(function(){
+    secs--;if(secs<=0){clearInterval(countdownTimer);location.reload();return;}
+    var m=Math.floor(secs/60);var s=secs%60;
+    document.getElementById('countdown').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+function friendly(msg){
+  if(!msg)return'Something went wrong.';
+  if(msg.includes('Invalid login')||msg.includes('invalid_credentials'))return'Incorrect email or password.';
+  if(msg.includes('Email not confirmed'))return'Please confirm your email first. Check your inbox.';
+  if(msg.includes('already registered'))return'This email is already registered.';
+  if(msg.includes('weak')||msg.includes('password'))return'Password must be at least 8 characters.';
+  if(msg.includes('rate limit'))return'Too many requests. Please wait a moment.';
+  return'Something went wrong. Please try again.';
+}
+async function afterAuth(session){
+  NHSec.clearRate();
+  var user=session.user;
+  var isAdmin=user.email===ADMIN_EMAIL;
+  var role=isAdmin?'admin':((user.user_metadata&&user.user_metadata.role)||'reader');
+  try{
+    await db.from('profiles').upsert({
+      id:user.id,
+      full_name:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],
+      role:role,
+      avatar_url:(user.user_metadata&&user.user_metadata.avatar_url)||null
+    },{onConflict:'id'});
+  }catch(e){}
+  window.location.replace(isAdmin?'_nh_ctrl_panel.html':'index.html');
+}
+async function doLogin(e){
+  e.preventDefault();hideAlert();
+  if(NHSec.honeyFilled('nh_username'))return;
+  var r=NHSec.checkRate();
+  if(!r.allowed){showLockout(r.mins);return;}
+  var email=NHSec.sanitize(document.getElementById('li-email').value);
+  var password=document.getElementById('li-pw').value;
+  if(!NHSec.validEmail(email)){showAlert('Please enter a valid email address.');return;}
+  setBusy('li-btn',true,'Sign In');
+  var res=await db.auth.signInWithPassword({email:email,password:password});
+  if(res.error){
+    NHSec.recordFail();
+    var r2=NHSec.checkRate();
+    if(!r2.allowed){showLockout(r2.mins);return;}
+    showAlert(friendly(res.error.message));
+    setBusy('li-btn',false,'Sign In');
+    return;
+  }
+  await afterAuth(res.data.session);
+}
+async function doSignup(e){
+  e.preventDefault();hideAlert();
+  if(NHSec.honeyFilled('nh_website'))return;
+  var name=NHSec.sanitize(document.getElementById('su-name').value);
+  var email=NHSec.sanitize(document.getElementById('su-email').value);
+  var pw=document.getElementById('su-pw').value;
+  var pw2=document.getElementById('su-pw2').value;
+  var role=document.getElementById('su-role').value;
+  if(!NHSec.validEmail(email)){showAlert('Please enter a valid email address.');return;}
+  if(pw!==pw2){showAlert('Passwords do not match.');return;}
+  if(pw.length<8){showAlert('Password must be at least 8 characters.');return;}
+  setBusy('su-btn',true,'Create Account');
+  var res=await db.auth.signUp({email:email,password:pw,options:{data:{full_name:name,role:role}}});
+  if(res.error){showAlert(friendly(res.error.message));setBusy('su-btn',false,'Create Account');return;}
+  if(res.data.session){await afterAuth(res.data.session);return;}
+  showAlert('Account created! Check your email to confirm, then sign in.','ok');
+  setBusy('su-btn',false,'Create Account');
+}
+async function doGoogle(){
+  hideAlert();
+  var res=await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://abdirizak1212.github.io/Project/_nh_ctrl_panel.html'}});
+  if(res.error)showAlert(friendly(res.error.message));
+}
+async function doReset(e){
+  e.preventDefault();
+  var email=NHSec.sanitize(document.getElementById('li-email').value);
+  if(!email||!NHSec.validEmail(email)){showAlert('Enter your email address above first.');return;}
+  var res=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://abdirizak1212.github.io/Project/login.html'});
+  if(res.error){showAlert(friendly(res.error.message));return;}
+  showAlert('Password reset email sent. Check your inbox.','ok');
+}
+
+// Init — wrapped in try/catch so a blocked localStorage never crashes the page
+try{
+  var _r = NHSec.checkRate();
+  if(!_r.allowed) showLockout(_r.mins);
+}catch(e){}
+
+db.auth.getSession().then(function(res){
+  if(res.data && res.data.session) afterAuth(res.data.session);
+});
+
 NHSec.initVisibilityGuard(['li-pw','su-pw','su-pw2']);
-<\/script>
+</script>
 </body>
 </html>
