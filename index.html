@@ -9,6 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .btn-signin{
+      display:inline-flex;align-items:center;gap:.4rem;
+      background:transparent;border:1.5px solid #f0a500;
+      color:#f0a500;padding:.38rem .9rem;border-radius:6px;
+      font-size:.82rem;font-weight:600;text-decoration:none;
+      transition:.2s;white-space:nowrap;cursor:pointer
+    }
+    .btn-signin:hover{background:#f0a500;color:#0a1628}
+  </style>
 </head>
 <body>
   <div class="ticker-bar">
@@ -33,6 +43,7 @@
       </ul>
       <div class="nav-actions">
         <button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button>
+        <a href="login.html" class="btn-signin"><i class="fas fa-user"></i> Sign In</a>
         <a href="newsletter.html" class="btn-subscribe">Subscribe</a>
         <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
       </div>
@@ -137,7 +148,7 @@
   <footer class="footer"><div class="container"><div class="footer-grid">
     <div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p><div class="footer-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div></div>
     <div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="blog.html">Technology</a></li><li><a href="blog.html">Startups</a></li></ul></div>
-    <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="#">Write for Us</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="login.html">Sign In</a></li></ul></div>
     <div class="footer-col"><h4>Contact</h4><ul><li><i class="fas fa-envelope"></i> hello@nadaara.com</li><li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li><li><i class="fas fa-clock"></i> Mon–Fri, 9am–5pm EAT</li></ul></div>
   </div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div></div></div></footer>
   <script src="main.js"></script>
