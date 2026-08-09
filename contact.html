@@ -1,70 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Contact – Nadaara Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-hero{background:linear-gradient(135deg,#0a1628 0%,#112240 100%);padding:5rem 0 3rem;border-bottom:1px solid #1e3055;text-align:center}
+    .contact-hero .badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);color:#f0a500;padding:.35rem .9rem;border-radius:20px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.25rem}
+    .contact-hero h1{font-size:2.5rem;font-weight:700;color:#fff;margin-bottom:.75rem}
+    .contact-hero p{color:#8892a4;max-width:520px;margin:0 auto;font-size:.95rem;line-height:1.7}
+    .contact-body{max-width:1000px;margin:0 auto;padding:3.5rem 1.5rem 5rem}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:2.5rem;align-items:start}
+    @media(max-width:720px){.contact-grid{grid-template-columns:1fr}}
+    /* Info cards */
+    .contact-info-cards{display:flex;flex-direction:column;gap:1rem}
+    .info-card{background:#112240;border:1px solid #1e3055;border-radius:12px;padding:1.25rem 1.5rem;display:flex;align-items:flex-start;gap:1rem;transition:.2s}
+    .info-card:hover{border-color:rgba(240,165,0,.3)}
+    .info-card .ic{width:44px;height:44px;background:rgba(240,165,0,.12);border-radius:10px;display:grid;place-items:center;color:#f0a500;font-size:1.1rem;flex-shrink:0}
+    .info-card h4{color:#fff;font-size:.9rem;font-weight:600;margin-bottom:.2rem}
+    .info-card p,.info-card a{color:#8892a4;font-size:.85rem;text-decoration:none;line-height:1.6;margin:0}
+    .info-card a:hover{color:#f0a500}
+    /* Social row */
+    .social-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem}
+    .soc-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid #1e3055;color:#94a3b8;transition:.2s}
+    .soc-btn:hover{border-color:#f0a500;color:#f0a500}
+    .soc-btn.fb{border-color:#1877f2;color:#1877f2}.soc-btn.fb:hover{background:#1877f2;color:#fff}
+    .soc-btn.tt{border-color:#ee1d52;color:#ee1d52}.soc-btn.tt:hover{background:#ee1d52;color:#fff}
+    .soc-btn.li{border-color:#0077b5;color:#0077b5}.soc-btn.li:hover{background:#0077b5;color:#fff}
+    /* Form */
+    .contact-form-box{background:#112240;border:1px solid #1e3055;border-radius:16px;padding:2rem}
+    .contact-form-box h3{color:#fff;font-size:1.1rem;font-weight:600;margin-bottom:.3rem}
+    .contact-form-box .sub{color:#8892a4;font-size:.82rem;margin-bottom:1.5rem}
+    .form-field{margin-bottom:1rem}
+    .form-field label{display:block;color:#94a3b8;font-size:.8rem;font-weight:500;margin-bottom:.35rem}
+    .form-field input,.form-field textarea,.form-field select{width:100%;background:rgba(255,255,255,.04);border:1px solid #1e3055;border-radius:8px;padding:.72rem 1rem;color:#e8ecf0;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;transition:.2s;resize:vertical}
+    .form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:#f0a500}
+    .form-field select option{background:#0f2040}
+    .btn-send{width:100%;padding:.85rem;background:#f0a500;color:#0a1628;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+    .btn-send:hover{background:#ffc533}
+    .form-note{color:#8892a4;font-size:.76rem;text-align:center;margin-top:.75rem}
+    .form-alert{padding:.7rem 1rem;border-radius:8px;font-size:.82rem;margin-top:.75rem;display:none}
+    .form-alert.ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);color:#86efac;display:block}
+    .form-alert.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#fca5a5;display:block}
+    /* Map placeholder */
+    .map-placeholder{background:linear-gradient(135deg,#0f2040,#112240);border:1px solid #1e3055;border-radius:12px;padding:3rem;text-align:center;color:#8892a4;margin-top:2.5rem}
+    .map-placeholder i{font-size:2.5rem;color:#f0a500;margin-bottom:1rem}
+    .map-placeholder h4{color:#fff;margin-bottom:.4rem}
+    .btn-signin{display:inline-flex;align-items:center;gap:.4rem;background:transparent;border:1.5px solid #f0a500;color:#f0a500;padding:.38rem .9rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;transition:.2s}
+    .btn-signin:hover{background:#f0a500;color:#0a1628}
+  </style>
 </head>
 <body>
-  <div class="ticker-bar"><span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span><div class="ticker-track"><div class="ticker-content"><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span><span>Mogadishu Tech Summit 2026 draws 5,000+ innovators &nbsp;•&nbsp;</span><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span></div></div></div>
+  <div class="ticker-bar"><span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span><div class="ticker-track"><div class="ticker-content"><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span><span>Mogadishu Tech Summit 2026 draws 5,000+ innovators &nbsp;•&nbsp;</span><span>New startup accelerator opens in Hargeisa with $2M fund &nbsp;•&nbsp;</span></div></div></div>
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></a>
-      <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="about.html">About</a></li><li><a href="contact.html" class="active">Contact</a></li></ul>
-      <div class="nav-actions"><button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button><a href="newsletter.html" class="btn-subscribe">Subscribe</a><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li>
+        <li><a href="newsletter.html">Newsletter</a></li><li><a href="about.html">About</a></li><li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button>
+        <a href="login.html" class="btn-signin"><i class="fas fa-user"></i> Sign In</a>
+        <a href="newsletter.html" class="btn-subscribe">Subscribe</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
     </div>
-    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search…" id="searchInput" /><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
+    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search…" id="searchInput"><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
   </nav>
-  <section class="page-hero"><div class="page-hero-content"><div class="section-label"><i class="fas fa-envelope"></i> Get in Touch</div><h1>Contact Nadaara Hub</h1><p>Have a story tip, partnership inquiry, or just want to say hello? We'd love to hear from you.</p></div></section>
-  <section class="contact-page">
-    <div class="container">
-      <div class="contact-wrapper reveal">
-        <div class="contact-form-section">
-          <h2>Send Us a Message</h2>
-          <form class="contact-form" onsubmit="submitContact(event)">
-            <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name" required /></div><div class="form-group"><label>Last Name</label><input type="text" placeholder="Your last name" required /></div></div>
-            <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required /></div>
-            <div class="form-group"><label>Subject</label><select><option value="">Select a topic…</option><option>Story Tip or Pitch</option><option>Partnership or Collaboration</option><option>Advertising Inquiry</option><option>Write for Nadaara Hub</option><option>Newsletter Feedback</option><option>Technical Issue</option><option>Other</option></select></div>
-            <div class="form-group"><label>Message</label><textarea rows="6" placeholder="Tell us what's on your mind…" required></textarea></div>
-            <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Send Message</button>
-          </form>
+
+  <div class="contact-hero">
+    <div class="badge"><i class="fas fa-envelope"></i> Get in Touch</div>
+    <h1>Contact Nadaara Hub</h1>
+    <p>Have a story tip, partnership proposal, or question? We respond to every message within 24 hours.</p>
+  </div>
+
+  <div class="contact-body">
+    <div class="contact-grid">
+
+      <!-- Info -->
+      <div>
+        <div class="contact-info-cards">
+          <div class="info-card">
+            <div class="ic"><i class="fas fa-envelope"></i></div>
+            <div><h4>Email</h4><a href="mailto:nadaarahub@gmail.com">nadaarahub@gmail.com</a></div>
+          </div>
+          <div class="info-card">
+            <div class="ic"><i class="fas fa-phone"></i></div>
+            <div><h4>Phone / WhatsApp</h4><a href="tel:+252611009344">+252 611 009 344</a></div>
+          </div>
+          <div class="info-card">
+            <div class="ic"><i class="fas fa-globe"></i></div>
+            <div><h4>Website</h4><a href="https://nadaarahub.com" target="_blank">nadaarahub.com</a></div>
+          </div>
+          <div class="info-card">
+            <div class="ic"><i class="fas fa-map-marker-alt"></i></div>
+            <div><h4>Location</h4><p>Mogadishu, Federal Republic of Somalia</p></div>
+          </div>
+          <div class="info-card">
+            <div class="ic"><i class="fas fa-clock"></i></div>
+            <div><h4>Response Time</h4><p>Within 24 hours &mdash; Mon to Sat</p></div>
+          </div>
         </div>
-        <div class="contact-info-section">
-          <h2>Other Ways to Reach Us</h2>
-          <div class="contact-cards">
-            <div class="contact-card"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-details"><h4>Email Us</h4><p>hello@nadaara.com</p><span>For general inquiries and story pitches</span></div></div>
-            <div class="contact-card"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div class="contact-details"><h4>Our Location</h4><p>Mogadishu, Somalia</p><span>Horn of Africa — covering the region</span></div></div>
-            <div class="contact-card"><div class="contact-icon"><i class="fas fa-clock"></i></div><div class="contact-details"><h4>Response Time</h4><p>Within 24–48 hours</p><span>Monday to Friday, 9am–5pm EAT</span></div></div>
-            <div class="contact-card"><div class="contact-icon"><i class="fas fa-pen-nib"></i></div><div class="contact-details"><h4>Write for Us</h4><p>editor@nadaara.com</p><span>Pitch your article to our editorial team</span></div></div>
-          </div>
-          <div class="contact-social"><h4>Follow Us</h4>
-            <div class="social-grid">
-              <a href="#" class="social-link"><i class="fab fa-twitter"></i><span>@NadaaraHub</span></a>
-              <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i><span>Nadaara Hub</span></a>
-              <a href="#" class="social-link"><i class="fab fa-facebook-f"></i><span>Nadaara Hub</span></a>
-              <a href="#" class="social-link"><i class="fab fa-instagram"></i><span>@nadaarahub</span></a>
-            </div>
-          </div>
+
+        <div class="social-row">
+          <a href="https://www.facebook.com/NadaaraHub" target="_blank" class="soc-btn fb"><i class="fab fa-facebook-f"></i> Facebook</a>
+          <a href="https://www.tiktok.com/@NadaaraHub" target="_blank" class="soc-btn tt"><i class="fab fa-tiktok"></i> TikTok</a>
+          <a href="https://www.linkedin.com/company/NadaaraHub" target="_blank" class="soc-btn li"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+        </div>
+
+        <div class="map-placeholder" style="margin-top:1.5rem">
+          <i class="fas fa-map-marked-alt"></i>
+          <h4>Mogadishu, Somalia</h4>
+          <p style="font-size:.82rem">East Africa &middot; Indian Ocean Rim</p>
         </div>
       </div>
-      <div class="faq-section">
-        <div class="section-header reveal"><div class="section-label"><i class="fas fa-question-circle"></i> FAQ</div><h2 class="section-title">Frequently Asked Questions</h2></div>
-        <div class="faq-list reveal">
-          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>How can I submit an article to Nadaara Hub?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>We welcome guest contributions. Email a pitch to editor@nadaara.com. We review all pitches within 5 business days.</p></div></div>
-          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>How do I advertise with Nadaara Hub?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>We offer sponsored content, newsletter sponsorships, banner advertising, and event partnerships. Email hello@nadaara.com.</p></div></div>
-          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>Can I republish Nadaara Hub articles on my website?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>Our content is protected under copyright. You may share excerpts (up to 150 words) with a clear attribution link. For full republication rights, please contact us.</p></div></div>
-          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>How do I report a factual error in an article?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>Email hello@nadaara.com with the article URL, the specific error, and the correct information with sources.</p></div></div>
-          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>Is Nadaara Hub available in Somali language?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer"><p>We currently publish primarily in English. We are actively working on a bilingual Somali/English version. Subscribe to be notified when it launches.</p></div></div>
-        </div>
+
+      <!-- Form -->
+      <div class="contact-form-box">
+        <h3>Send Us a Message</h3>
+        <p class="sub">For editorial pitches, partnerships, advertising, or general enquiries.</p>
+        <div id="form-alert" class="form-alert"></div>
+        <form onsubmit="sendMessage(event)">
+          <div class="form-field"><label>Your Name</label><input type="text" id="cf-name" placeholder="Full name" required maxlength="100"></div>
+          <div class="form-field"><label>Email Address</label><input type="email" id="cf-email" placeholder="you@example.com" required maxlength="254"></div>
+          <div class="form-field"><label>Subject</label>
+            <select id="cf-subject">
+              <option value="">Select a topic…</option>
+              <option>Editorial Pitch / Story Idea</option>
+              <option>Write for Us</option>
+              <option>Partnership / Sponsorship</option>
+              <option>Advertising Enquiry</option>
+              <option>Technical Issue</option>
+              <option>Press &amp; Media</option>
+              <option>General Enquiry</option>
+            </select>
+          </div>
+          <div class="form-field"><label>Message</label><textarea id="cf-message" rows="5" placeholder="Tell us what’s on your mind…" required maxlength="2000"></textarea></div>
+          <button type="submit" class="btn-send"><i class="fas fa-paper-plane"></i> Send Message</button>
+          <p class="form-note"><i class="fas fa-lock"></i> Your information is kept private and never shared.</p>
+        </form>
       </div>
     </div>
-  </section>
-  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li>hello@nadaara.com</li><li>Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p></div></div></footer>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia’s leading platform for AI, innovation, and digital transformation stories.</p>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/NadaaraHub" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.tiktok.com/@NadaaraHub" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.linkedin.com/company/NadaaraHub" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    </div></div>
+    <div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="about.html">About Us</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul>
+      <li><i class="fas fa-envelope"></i> nadaarahub@gmail.com</li>
+      <li><i class="fas fa-phone"></i> +252 611 009 344</li>
+      <li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li>
+    </ul></div>
+  </div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div></div></div></footer>
+
   <script src="main.js"></script>
+  <script>
+  function sendMessage(e){
+    e.preventDefault();
+    var name=document.getElementById('cf-name').value.trim();
+    var email=document.getElementById('cf-email').value.trim();
+    var subject=document.getElementById('cf-subject').value;
+    var msg=document.getElementById('cf-message').value.trim();
+    if(!subject){var al=document.getElementById('form-alert');al.textContent='Please select a subject.';al.className='form-alert err';return;}
+    var al=document.getElementById('form-alert');
+    al.textContent='Thank you, '+name+'! Your message has been sent. We’ll get back to you within 24 hours.';
+    al.className='form-alert ok';
+    e.target.reset();
+  }
+  </script>
 </body>
 </html>

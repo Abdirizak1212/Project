@@ -9,33 +9,149 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Founder Card ── */
+    .founder-section{padding:4rem 0 2rem}
+    .founder-card{
+      background:linear-gradient(135deg,#0f2040 0%,#112240 60%,#162a50 100%);
+      border:1px solid #1e3055;border-radius:20px;padding:3rem;
+      display:flex;align-items:center;gap:3rem;position:relative;overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,.4)
+    }
+    .founder-card::before{
+      content:'';position:absolute;top:-60px;right:-60px;
+      width:300px;height:300px;border-radius:50%;
+      background:radial-gradient(circle,rgba(240,165,0,.08) 0%,transparent 70%);
+      pointer-events:none
+    }
+    .founder-photo-wrap{position:relative;flex-shrink:0}
+    .founder-photo{
+      width:180px;height:180px;border-radius:50%;object-fit:cover;
+      border:4px solid #f0a500;box-shadow:0 0 0 8px rgba(240,165,0,.12)
+    }
+    .founder-badge{
+      position:absolute;bottom:6px;right:6px;
+      background:#f0a500;color:#0a1628;font-size:.7rem;font-weight:700;
+      padding:.25rem .6rem;border-radius:20px;white-space:nowrap
+    }
+    .founder-info{flex:1}
+    .founder-role-tag{
+      display:inline-flex;align-items:center;gap:.4rem;
+      background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);
+      color:#f0a500;padding:.3rem .8rem;border-radius:20px;
+      font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.75rem
+    }
+    .founder-name{font-size:1.9rem;font-weight:700;color:#fff;margin-bottom:.25rem;line-height:1.2}
+    .founder-title{font-size:1rem;color:#f0a500;font-weight:500;margin-bottom:.75rem}
+    .founder-bio{color:#94a3b8;font-size:.92rem;line-height:1.75;margin-bottom:1.25rem;max-width:560px}
+    .founder-contacts{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.25rem}
+    .founder-contact-item{display:flex;align-items:center;gap:.6rem;color:#94a3b8;font-size:.85rem}
+    .founder-contact-item i{color:#f0a500;width:16px;text-align:center;flex-shrink:0}
+    .founder-contact-item a{color:#94a3b8;text-decoration:none;transition:.15s}
+    .founder-contact-item a:hover{color:#f0a500}
+    .founder-socials{display:flex;gap:.6rem;flex-wrap:wrap}
+    .founder-social-btn{
+      display:inline-flex;align-items:center;gap:.4rem;
+      padding:.45rem .9rem;border-radius:8px;font-size:.8rem;font-weight:600;
+      text-decoration:none;transition:.2s;border:1px solid #1e3055;color:#94a3b8
+    }
+    .founder-social-btn:hover{border-color:#f0a500;color:#f0a500}
+    .founder-social-btn.fb{border-color:#1877f2;color:#1877f2}
+    .founder-social-btn.fb:hover{background:#1877f2;color:#fff}
+    .founder-social-btn.tt{border-color:#ee1d52;color:#ee1d52}
+    .founder-social-btn.tt:hover{background:#ee1d52;color:#fff}
+    .founder-social-btn.li{border-color:#0077b5;color:#0077b5}
+    .founder-social-btn.li:hover{background:#0077b5;color:#fff}
+    /* Responsive founder card */
+    @media(max-width:680px){
+      .founder-card{flex-direction:column;text-align:center;gap:1.5rem;padding:2rem 1.5rem}
+      .founder-contacts{align-items:center}
+      .founder-socials{justify-content:center}
+    }
+    /* Sign In btn */
+    .btn-signin{display:inline-flex;align-items:center;gap:.4rem;background:transparent;border:1.5px solid #f0a500;color:#f0a500;padding:.38rem .9rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;transition:.2s}
+    .btn-signin:hover{background:#f0a500;color:#0a1628}
+  </style>
 </head>
 <body>
-  <div class="ticker-bar"><span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span><div class="ticker-track"><div class="ticker-content"><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span><span>Mogadishu Tech Summit 2026 draws 5,000+ innovators &nbsp;•&nbsp;</span><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span></div></div></div>
+  <div class="ticker-bar"><span class="ticker-label"><i class="fas fa-bolt"></i> Breaking</span><div class="ticker-track"><div class="ticker-content"><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span><span>Mogadishu Tech Summit 2026 draws 5,000+ innovators &nbsp;•&nbsp;</span><span>New startup accelerator opens in Hargeisa with $2M fund &nbsp;•&nbsp;</span><span>AI literacy program reaches 50,000 Somali youth &nbsp;•&nbsp;</span><span>Somalia launches first AI-powered digital banking platform &nbsp;•&nbsp;</span></div></div></div>
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></a>
-      <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="about.html" class="active">About</a></li><li><a href="contact.html">Contact</a></li></ul>
-      <div class="nav-actions"><button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button><a href="newsletter.html" class="btn-subscribe">Subscribe</a><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li><li><a href="blog.html">Blog</a></li><li><a href="ai-news.html">AI News</a></li>
+        <li><a href="newsletter.html">Newsletter</a></li><li><a href="about.html" class="active">About</a></li><li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-search" onclick="toggleSearch()"><i class="fas fa-search"></i></button>
+        <a href="login.html" class="btn-signin"><i class="fas fa-user"></i> Sign In</a>
+        <a href="newsletter.html" class="btn-subscribe">Subscribe</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
     </div>
-    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search…" id="searchInput" /><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
+    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search articles, topics, authors…" id="searchInput" /><button onclick="runSearch()"><i class="fas fa-search"></i></button><button class="close-search" onclick="toggleSearch()"><i class="fas fa-times"></i></button></div></div>
   </nav>
-  <section class="page-hero"><div class="page-hero-content"><div class="section-label"><i class="fas fa-info-circle"></i> Our Story</div><h1>About Nadaara Hub</h1><p>We exist to tell the stories of Somalia's innovators, entrepreneurs, and digital pioneers.</p></div></section>
+
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <div class="section-label"><i class="fas fa-info-circle"></i> Our Story</div>
+      <h1>About Nadaara Hub</h1>
+      <p>We exist to tell the stories of Somalia’s innovators, entrepreneurs, and digital pioneers — built by a Somali, for Somalia and the world.</p>
+    </div>
+  </section>
+
   <section class="about-page">
     <div class="container">
-      <div class="about-intro reveal">
+
+      <!-- ── FOUNDER ── -->
+      <div class="founder-section reveal">
+        <div class="section-label" style="margin-bottom:1rem"><i class="fas fa-user-tie"></i> Founder & CEO</div>
+        <div class="founder-card">
+          <div class="founder-photo-wrap">
+            <img
+              src="assets/founder.jpg"
+              alt="Abdirizaka Abdi Mohamed — Founder & CEO of Nadaara Hub"
+              class="founder-photo"
+              onerror="this.onerror=null;this.src='';this.outerHTML='<div style=&quot;width:180px;height:180px;border-radius:50%;background:linear-gradient(135deg,#0f2040,#2d5fa6);border:4px solid #f0a500;box-shadow:0 0 0 8px rgba(240,165,0,.12);display:flex;align-items:center;justify-content:center;font-size:3.5rem;font-weight:700;color:#f0a500&quot;>A</div>'"
+            >
+            <span class="founder-badge">Verified Founder</span>
+          </div>
+          <div class="founder-info">
+            <div class="founder-role-tag"><i class="fas fa-star"></i> Founder &amp; CEO</div>
+            <h2 class="founder-name">Abdirizaka Abdi Mohamed</h2>
+            <div class="founder-title">Founder &amp; CEO &mdash; Nadaara Hub</div>
+            <p class="founder-bio">
+              Abdirizaka is the visionary behind Nadaara Hub, Somalia’s premier platform for technology, artificial intelligence, and digital innovation. Driven by a passion for connecting Somalia’s growing tech ecosystem with the world, he built Nadaara Hub to empower the next generation of Somali entrepreneurs, developers, and digital leaders. Under his leadership, Nadaara Hub has grown into a trusted voice for AI, startups, fintech, and digital transformation across the Horn of Africa.
+            </p>
+            <div class="founder-contacts">
+              <div class="founder-contact-item"><i class="fas fa-envelope"></i><a href="mailto:nadaarahub@gmail.com">nadaarahub@gmail.com</a></div>
+              <div class="founder-contact-item"><i class="fas fa-phone"></i><a href="tel:+252611009344">+252 611 009 344</a></div>
+              <div class="founder-contact-item"><i class="fas fa-globe"></i><a href="https://nadaarahub.com" target="_blank">nadaarahub.com</a></div>
+              <div class="founder-contact-item"><i class="fas fa-map-marker-alt"></i><span>Mogadishu, Federal Republic of Somalia</span></div>
+            </div>
+            <div class="founder-socials">
+              <a href="https://www.facebook.com/NadaaraHub" target="_blank" rel="noopener" class="founder-social-btn fb"><i class="fab fa-facebook-f"></i> Facebook</a>
+              <a href="https://www.tiktok.com/@NadaaraHub" target="_blank" rel="noopener" class="founder-social-btn tt"><i class="fab fa-tiktok"></i> TikTok</a>
+              <a href="https://www.linkedin.com/company/NadaaraHub" target="_blank" rel="noopener" class="founder-social-btn li"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MISSION ── -->
+      <div class="about-intro reveal" style="margin-top:3rem">
         <div class="about-intro-text">
           <div class="section-label"><i class="fas fa-bullseye"></i> Our Mission</div>
-          <h2>Empowering Somalia's Digital Generation</h2>
-          <p>Nadaara Hub was founded in 2024 with a simple but powerful belief: Somalia's innovation story deserves to be told — by Somalis, for Somalis, and for the world.</p>
-          <p>We cover artificial intelligence, technology, entrepreneurship, fintech, and digital transformation across Somalia and East Africa. Our mission is to inform, inspire, and connect the communities shaping Somalia's digital future.</p>
-          <p>The name "Nadaara" comes from the Arabic root meaning clarity, vision, and brilliance — values that guide every story we publish.</p>
+          <h2>Empowering Somalia’s Digital Generation</h2>
+          <p>Nadaara Hub was founded with a simple but powerful belief: Somalia’s innovation story deserves to be told — by Somalis, for Somalis, and for the world.</p>
+          <p>We cover artificial intelligence, technology, entrepreneurship, fintech, and digital transformation across Somalia and East Africa. Our mission is to inform, inspire, and connect the communities shaping Somalia’s digital future.</p>
+          <p>The name “Nadaara” comes from the Arabic root meaning <em>clarity, vision, and brilliance</em> — values that guide every story we publish.</p>
         </div>
         <div class="about-intro-visual">
           <div class="about-logo-display">
             <div class="logo-hex-lg"><span>N</span></div>
             <div class="about-pillars-list">
-              <div><i class="fas fa-check-circle"></i> Independent & Objective</div>
+              <div><i class="fas fa-check-circle"></i> Independent &amp; Objective</div>
               <div><i class="fas fa-check-circle"></i> Somalia-First Perspective</div>
               <div><i class="fas fa-check-circle"></i> Evidence-Based Reporting</div>
               <div><i class="fas fa-check-circle"></i> Bilingual Content</div>
@@ -43,6 +159,8 @@
           </div>
         </div>
       </div>
+
+      <!-- ── STATS ── -->
       <div class="about-stats reveal">
         <div class="about-stat"><span class="stat-big">50+</span><span class="stat-name">Published Articles</span></div>
         <div class="about-stat"><span class="stat-big">12K+</span><span class="stat-name">Monthly Readers</span></div>
@@ -51,24 +169,47 @@
         <div class="about-stat"><span class="stat-big">3</span><span class="stat-name">Cities Covered</span></div>
         <div class="about-stat"><span class="stat-big">#1</span><span class="stat-name">Somali Tech Blog</span></div>
       </div>
+
+      <!-- ── VALUES ── -->
       <div class="section-header reveal"><div class="section-label"><i class="fas fa-compass"></i> Our Values</div><h2 class="section-title">What We Stand For</h2></div>
       <div class="mission-grid reveal">
-        <div class="mission-card"><div class="mission-icon"><i class="fas fa-search"></i></div><h4>Truth & Accuracy</h4><p>We verify before we publish. Every story we run is fact-checked, sourced, and reviewed by our editorial team.</p></div>
-        <div class="mission-card"><div class="mission-icon"><i class="fas fa-heart"></i></div><h4>Community First</h4><p>Somalia's innovation ecosystem is our heartbeat. We amplify the voices and stories of Somali entrepreneurs.</p></div>
+        <div class="mission-card"><div class="mission-icon"><i class="fas fa-search"></i></div><h4>Truth &amp; Accuracy</h4><p>We verify before we publish. Every story is fact-checked, sourced, and reviewed by our editorial team.</p></div>
+        <div class="mission-card"><div class="mission-icon"><i class="fas fa-heart"></i></div><h4>Community First</h4><p>Somalia’s innovation ecosystem is our heartbeat. We amplify the voices of Somali entrepreneurs and pioneers.</p></div>
         <div class="mission-card"><div class="mission-icon"><i class="fas fa-globe"></i></div><h4>Global Lens</h4><p>We connect local stories to global trends, giving Somali readers context in the broader world of technology.</p></div>
         <div class="mission-card"><div class="mission-icon"><i class="fas fa-users"></i></div><h4>Inclusive Coverage</h4><p>We actively seek out stories from underrepresented voices — women founders, rural entrepreneurs, youth innovators.</p></div>
       </div>
-      <div class="section-header reveal"><div class="section-label"><i class="fas fa-users"></i> The Team</div><h2 class="section-title">Meet the Nadaara Team</h2></div>
-      <div class="team-grid reveal">
-        <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,#0f2040,#2d5fa6)">AJ</div><h4>Ahmed Jama</h4><span class="team-role">Founder & Editor-in-Chief</span><p>Former tech journalist and digital entrepreneur with 10+ years covering East Africa's startup ecosystem.</p><div class="team-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div>
-        <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,#162a50,#f0a500)">FH</div><h4>Fatima Hassan</h4><span class="team-role">Tech Editor & AI Correspondent</span><p>AI researcher turned journalist, covering machine learning, NLP, and tech policy across the Horn of Africa.</p><div class="team-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div>
-        <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,#0a1628,#4a7ab5)">MA</div><h4>Mohamed Ali</h4><span class="team-role">Fintech & Business Editor</span><p>Former banker and fintech advisor, covering mobile money, investment, and financial inclusion in Somalia.</p><div class="team-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div>
-        <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,#1e3a6b,#2d5fa6)">AW</div><h4>Amina Warsame</h4><span class="team-role">Education & Culture Writer</span><p>Educator and digital storyteller focusing on EdTech, youth entrepreneurship, and Somalia's cultural tech scene.</p><div class="team-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div>
+
+      <!-- ── CTA ── -->
+      <div class="about-cta reveal">
+        <div class="about-cta-inner">
+          <h2>Want to Contribute?</h2>
+          <p>We welcome contributions from journalists, researchers, entrepreneurs, and technologists across the Somali diaspora and beyond.</p>
+          <div class="about-cta-buttons">
+            <a href="contact.html" class="btn-primary"><i class="fas fa-pen"></i> Write for Us</a>
+            <a href="newsletter.html" class="btn-outline"><i class="fas fa-envelope"></i> Subscribe</a>
+          </div>
+        </div>
       </div>
-      <div class="about-cta reveal"><div class="about-cta-inner"><h2>Want to Contribute?</h2><p>We welcome contributions from journalists, researchers, entrepreneurs, and technologists across the Somali diaspora.</p><div class="about-cta-buttons"><a href="contact.html" class="btn-primary"><i class="fas fa-pen"></i> Write for Us</a><a href="newsletter.html" class="btn-outline"><i class="fas fa-envelope"></i> Subscribe</a></div></div></div>
+
     </div>
   </section>
-  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li>hello@nadaara.com</li><li>Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p></div></div></footer>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia’s leading platform for AI, innovation, and digital transformation stories.</p>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/NadaaraHub" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.tiktok.com/@NadaaraHub" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.linkedin.com/company/NadaaraHub" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    </div>
+    <div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li><li><a href="about.html">About Us</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul>
+      <li><i class="fas fa-envelope"></i> nadaarahub@gmail.com</li>
+      <li><i class="fas fa-phone"></i> +252 611 009 344</li>
+      <li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li>
+    </ul></div>
+  </div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div></div></div></footer>
   <script src="main.js"></script>
 </body>
 </html>
