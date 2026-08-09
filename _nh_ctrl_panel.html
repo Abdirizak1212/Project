@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Control Panel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a1628;--navy2:#112240;--gold:#f0a500;--gold2:#c8860a;
+  --red:#d93025;--green:#1e7e34;--text:#e8ecf0;--muted:#8892a4;
+  --card:#152035;--border:#1e3055;--side:240px
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--navy);color:var(--text);display:flex;min-height:100vh}
+
+/* ── Sidebar ── */
+#sidebar{
+  width:var(--side);background:var(--navy2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100
+}
+.sb-logo{
+  padding:24px 20px;border-bottom:1px solid var(--border);
+  font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase
+}
+.sb-logo span{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:2px;letter-spacing:.05em}
+nav{flex:1;padding:16px 0;overflow-y:auto}
+nav a{
+  display:flex;align-items:center;gap:10px;padding:10px 20px;
+  color:var(--muted);text-decoration:none;font-size:13.5px;transition:all .15s
+}
+nav a:hover,nav a.active{color:var(--text);background:rgba(240,165,0,.08)}
+nav a.active{border-left:3px solid var(--gold);padding-left:17px}
+nav a svg{width:16px;height:16px;flex-shrink:0}
+.sb-section{padding:8px 20px 4px;font-size:10px;font-weight:600;color:var(--border);letter-spacing:.1em;text-transform:uppercase;margin-top:8px}
+.sb-bottom{padding:16px 20px;border-top:1px solid var(--border)}
+.sb-user{font-size:12px;color:var(--muted)}
+.sb-user strong{display:block;color:var(--text);font-size:13px}
+#btn-logout{
+  margin-top:10px;width:100%;padding:7px;background:transparent;
+  border:1px solid var(--border);border-radius:6px;color:var(--muted);
+  font-size:12px;cursor:pointer;transition:all .15s
+}
+#btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* ── Main ── */
+#main{margin-left:var(--side);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{
+  padding:14px 28px;background:var(--navy2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50
+}
+.topbar h1{font-size:16px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.badge{background:var(--gold);color:#000;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+content-area{padding:28px;flex:1}
+.content-area{padding:28px;flex:1}
+
+/* ── Cards / Stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:20px;display:flex;flex-direction:column;gap:6px
+}
+.stat-card .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.stat-card .value{font-size:28px;font-weight:700;color:var(--gold)}
+.stat-card .sub{font-size:12px;color:var(--muted)}
+
+/* ── Tables ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-header h2{font-size:15px;font-weight:600}
+.btn{
+  padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer;
+  border:none;font-weight:500;transition:all .15s
+}
+.btn-primary{background:var(--gold);color:#000}
+.btn-primary:hover{background:var(--gold2)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-sm{padding:4px 10px;font-size:12px;border-radius:5px}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{
+  text-align:left;padding:10px 14px;font-size:11px;font-weight:600;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.07em;
+  border-bottom:1px solid var(--border)
+}
+tbody td{padding:11px 14px;border-bottom:1px solid rgba(30,48,85,.6)}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+.pill{
+  display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600
+}
+.pill-green{background:rgba(30,126,52,.2);color:#4caf7d}
+.pill-red{background:rgba(217,48,37,.2);color:#f48771}
+.pill-gold{background:rgba(240,165,0,.15);color:var(--gold)}
+.pill-blue{background:rgba(59,130,246,.2);color:#7db9f7}
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+
+/* ── Modal ── */
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:200;align-items:center;justify-content:center
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--navy2);border:1px solid var(--border);border-radius:12px;
+  width:min(640px,95vw);max-height:90vh;overflow-y:auto;padding:28px
+}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:20px}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.form-row input,.form-row textarea,.form-row select{
+  width:100%;background:var(--navy);border:1px solid var(--border);
+  border-radius:7px;padding:9px 12px;color:var(--text);font-size:13.5px;
+  outline:none;font-family:inherit;resize:vertical
+}
+.form-row input:focus,.form-row textarea:focus,.form-row select:focus{
+  border-color:var(--gold)
+}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+/* ── Pages ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── Loading ── */
+.loading{text-align:center;padding:60px;color:var(--muted)}
+.spinner{
+  width:32px;height:32px;border:3px solid var(--border);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Auth gate ── */
+#auth-gate{
+  display:flex;align-items:center;justify-content:center;
+  height:100vh;width:100%;flex-direction:column;gap:10px
+}
+#auth-gate p{color:var(--muted);font-size:14px}
+#panel-root{display:none;width:100%}
+
+/* ── Toast ── */
+#toast{
+  position:fixed;bottom:24px;right:24px;z-index:500;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:12px 18px;font-size:13px;
+  transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none
+}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.ok{border-left:4px solid var(--green)}
+#toast.err{border-left:4px solid var(--red)}
+</style>
+</head>
+<body>
+
+<!-- Auth Gate -->
+<div id="auth-gate"><div class="spinner"></div><p>Verifying credentials…</p></div>
+
+<!-- Panel -->
+<div id="panel-root">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sb-logo">Nadaara Hub<span>Control Panel</span></div>
+    <nav id="sb-nav">
+      <div class="sb-section">Overview</div>
+      <a href="#" class="active" data-page="dashboard" onclick="nav(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
+      </a>
+      <div class="sb-section">Content</div>
+      <a href="#" data-page="articles" onclick="nav(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Articles
+      </a>
+      <a href="#" data-page="ainews" onclick="nav(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>AI News
+      </a>
+      <div class="sb-section">Community</div>
+      <a href="#" data-page="subscribers" onclick="nav(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"/></svg>Newsletter
+      </a>
+      <a href="#" data-page="users" onclick="nav(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users
+      </a>
+      <div class="sb-section">System</div>
+      <a href="index.html" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Site
+      </a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user"><strong id="admin-name">Admin</strong><span id="admin-email"></span></div>
+      <button id="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div id="main">
+    <div class="topbar">
+      <h1 id="page-title">Dashboard</h1>
+      <div class="topbar-right"><span class="badge">ADMIN</span></div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- Dashboard -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card"><div class="label">Articles</div><div class="value" id="s-articles">—</div><div class="sub">total published</div></div>
+          <div class="stat-card"><div class="label">AI News</div><div class="value" id="s-ainews">—</div><div class="sub">total items</div></div>
+          <div class="stat-card"><div class="label">Subscribers</div><div class="value" id="s-subs">—</div><div class="sub">newsletter</div></div>
+          <div class="stat-card"><div class="label">Users</div><div class="value" id="s-users">—</div><div class="sub">registered</div></div>
+        </div>
+        <div class="table-wrap">
+          <div style="padding:18px 20px;border-bottom:1px solid var(--border)"><strong>Recent Articles</strong></div>
+          <table><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="dash-articles"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- Articles -->
+      <div class="page" id="page-articles">
+        <div class="section-header">
+          <h2>Articles</h2>
+          <button class="btn btn-primary" onclick="openArticleModal()">+ New Article</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="articles-tbody"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- AI News -->
+      <div class="page" id="page-ainews">
+        <div class="section-header">
+          <h2>AI News</h2>
+          <button class="btn btn-primary" onclick="openNewsModal()">+ Add News</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Headline</th><th>Source</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="ainews-tbody"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- Subscribers -->
+      <div class="page" id="page-subscribers">
+        <div class="section-header"><h2>Newsletter Subscribers</h2></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="subs-tbody"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div class="page" id="page-users">
+        <div class="section-header"><h2>Registered Users</h2></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Name</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="users-tbody"><tr><td colspan="4" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /main -->
+</div><!-- /panel-root -->
+
+<!-- Article Modal -->
+<div class="overlay" id="modal-article">
+  <div class="modal">
+    <h3 id="article-modal-title">New Article</h3>
+    <div class="form-row"><label>Title</label><input id="art-title" placeholder="Article title"></div>
+    <div class="form-row"><label>Slug (URL path)</label><input id="art-slug" placeholder="auto-generated from title"></div>
+    <div class="form-row"><label>Category</label>
+      <select id="art-cat">
+        <option>Technology</option><option>AI & Innovation</option><option>Startups</option>
+        <option>Education</option><option>Policy</option><option>Research</option>
+      </select>
+    </div>
+    <div class="form-row"><label>Summary</label><textarea id="art-summary" rows="2" placeholder="Short description…"></textarea></div>
+    <div class="form-row"><label>Content (HTML or text)</label><textarea id="art-content" rows="6" placeholder="Full article content…"></textarea></div>
+    <div class="form-row"><label>Featured Image URL</label><input id="art-img" placeholder="https://…"></div>
+    <div class="form-row">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="art-pub" style="width:auto"> Publish immediately
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-article')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveArticle()">Save Article</button>
+    </div>
+  </div>
+</div>
+
+<!-- News Modal -->
+<div class="overlay" id="modal-news">
+  <div class="modal">
+    <h3 id="news-modal-title">Add AI News</h3>
+    <div class="form-row"><label>Headline</label><input id="news-headline" placeholder="News headline"></div>
+    <div class="form-row"><label>Summary</label><textarea id="news-summary" rows="3" placeholder="Brief summary…"></textarea></div>
+    <div class="form-row"><label>Source / Publication</label><input id="news-source" placeholder="e.g. TechCrunch, Reuters"></div>
+    <div class="form-row"><label>Featured Image URL</label><input id="news-img" placeholder="https://…"></div>
+    <div class="form-row">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="news-pub" style="width:auto"> Publish immediately
+      </label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-news')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNews()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="security.js"></script>
+<script>
+'use strict';
+
+var editingArticleId = null;
+var editingNewsId    = null;
+
+// ── Auth gate ─────────────────────────────────────────────────
+db.auth.getSession().then(function(r){
+  var session = r.data.session;
+  if(!session){
+    window.location.replace('login.html');
+    return;
+  }
+  var email = session.user.email;
+  if(email !== ADMIN_EMAIL){
+    db.auth.signOut();
+    window.location.replace('index.html');
+    return;
+  }
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('panel-root').style.display = 'flex';
+  document.getElementById('admin-email').textContent = email;
+  document.getElementById('admin-name').textContent =
+    session.user.user_metadata && session.user.user_metadata.full_name
+      ? session.user.user_metadata.full_name : 'Admin';
+  loadDashboard();
+});
+
+// ── Navigation ─────────────────────────────────────────────────
+function nav(el){
+  document.querySelectorAll('#sb-nav a').forEach(function(a){a.classList.remove('active')});
+  el.classList.add('active');
+  var page = el.getAttribute('data-page');
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('page-'+page).classList.add('active');
+  var titles = {dashboard:'Dashboard',articles:'Articles',ainews:'AI News',subscribers:'Newsletter',users:'Users'};
+  document.getElementById('page-title').textContent = titles[page]||page;
+  if(page==='articles')   loadArticles();
+  if(page==='ainews')     loadAINews();
+  if(page==='subscribers')loadSubscribers();
+  if(page==='users')      loadUsers();
+  return false;
+}
+
+// ── Toast ──────────────────────────────────────────────────────
+function toast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.className='show '+(type||'ok');
+  clearTimeout(t._t);t._t=setTimeout(function(){t.className=''},3000);
+}
+
+// ── Modal helpers ──────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.overlay').forEach(function(o){
+  o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});
+});
+
+// ── Logout ─────────────────────────────────────────────────────
+function logout(){
+  db.auth.signOut().then(function(){
+    NHSec.clearRate();
+    window.location.replace('index.html');
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+function fmt(d){return d?new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'-'}
+function slug(s){
+  return s.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+
+// ── Dashboard ─────────────────────────────────────────────────
+function loadDashboard(){
+  Promise.all([
+    db.from('articles').select('id',{count:'exact',head:true}).eq('published',true),
+    db.from('ai_news').select('id',{count:'exact',head:true}),
+    db.from('newsletter_subscribers').select('id',{count:'exact',head:true}).eq('active',true),
+    db.from('profiles').select('id',{count:'exact',head:true}),
+    db.from('articles').select('id,title,category,published,created_at').order('created_at',{ascending:false}).limit(8)
+  ]).then(function(res){
+    document.getElementById('s-articles').textContent = res[0].count||0;
+    document.getElementById('s-ainews').textContent   = res[1].count||0;
+    document.getElementById('s-subs').textContent     = res[2].count||0;
+    document.getElementById('s-users').textContent    = res[3].count||0;
+    var rows = '';
+    (res[4].data||[]).forEach(function(a){
+      rows += '<tr><td>'+esc(a.title)+'</td><td>'+esc(a.category||'')+'</td>'+
+              '<td><span class="pill '+(a.published?'pill-green':'pill-red')+'">'+(a.published?'Published':'Draft')+'</span></td>'+
+              '<td>'+fmt(a.created_at)+'</td></tr>';
+    });
+    document.getElementById('dash-articles').innerHTML = rows||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px">No articles yet</td></tr>';
+  });
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// ── Articles CRUD ─────────────────────────────────────────────
+function loadArticles(){
+  db.from('articles').select('*').order('created_at',{ascending:false}).then(function(r){
+    var rows='';
+    (r.data||[]).forEach(function(a){
+      rows+='<tr>'+'<td>'+esc(a.title)+'</td><td>'+esc(a.category||'')+'</td><td>'+esc(a.author_name||'Admin')+'</td>'+
+        '<td><span class="pill '+(a.published?'pill-green':'pill-red')+'">'+(a.published?'Published':'Draft')+'</span></td>'+
+        '<td>'+fmt(a.created_at)+'</td>'+
+        '<td style="display:flex;gap:6px">'+
+          '<button class="btn btn-sm btn-ghost" onclick="editArticle('+a.id+')">Edit</button>'+
+          '<button class="btn btn-sm btn-danger" onclick="deleteArticle('+a.id+')">Del</button>'+
+        '</td></tr>';
+    });
+    document.getElementById('articles-tbody').innerHTML = rows||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No articles yet</td></tr>';
+  });
+}
+
+function openArticleModal(a){
+  editingArticleId = a?a.id:null;
+  document.getElementById('article-modal-title').textContent = a?'Edit Article':'New Article';
+  document.getElementById('art-title').value   = a?a.title:'';
+  document.getElementById('art-slug').value    = a?a.slug:'';
+  document.getElementById('art-cat').value     = a?a.category:'Technology';
+  document.getElementById('art-summary').value = a?a.summary:'';
+  document.getElementById('art-content').value = a?a.content:'';
+  document.getElementById('art-img').value     = a?a.featured_image:'';
+  document.getElementById('art-pub').checked   = a?a.published:false;
+  openModal('modal-article');
+}
+
+function editArticle(id){
+  db.from('articles').select('*').eq('id',id).single().then(function(r){
+    if(r.data) openArticleModal(r.data);
+  });
+}
+
+function saveArticle(){
+  var title   = document.getElementById('art-title').value.trim();
+  var s       = document.getElementById('art-slug').value.trim()||slug(title);
+  var cat     = document.getElementById('art-cat').value;
+  var summary = document.getElementById('art-summary').value.trim();
+  var content = document.getElementById('art-content').value.trim();
+  var img     = document.getElementById('art-img').value.trim();
+  var pub     = document.getElementById('art-pub').checked;
+  if(!title){toast('Title is required','err');return;}
+  var payload = {title:title,slug:s,category:cat,summary:summary,content:content,
+                 featured_image:img,published:pub,updated_at:new Date().toISOString()};
+  var p = editingArticleId
+    ? db.from('articles').update(payload).eq('id',editingArticleId)
+    : db.from('articles').insert(payload);
+  p.then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    closeModal('modal-article');
+    toast(editingArticleId?'Article updated':'Article created');
+    loadArticles();loadDashboard();
+  });
+}
+
+function deleteArticle(id){
+  if(!confirm('Delete this article permanently?'))return;
+  db.from('articles').delete().eq('id',id).then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    toast('Article deleted');loadArticles();loadDashboard();
+  });
+}
+
+// ── AI News CRUD ──────────────────────────────────────────────
+function loadAINews(){
+  db.from('ai_news').select('*').order('created_at',{ascending:false}).then(function(r){
+    var rows='';
+    (r.data||[]).forEach(function(n){
+      rows+='<tr><td>'+esc(n.headline)+'</td><td>'+esc(n.source||'')+'</td>'+
+        '<td><span class="pill '+(n.published?'pill-green':'pill-red')+'">'+(n.published?'Published':'Draft')+'</span></td>'+
+        '<td>'+fmt(n.created_at)+'</td>'+
+        '<td style="display:flex;gap:6px">'+
+          '<button class="btn btn-sm btn-ghost" onclick="editNews('+n.id+')">Edit</button>'+
+          '<button class="btn btn-sm btn-danger" onclick="deleteNews('+n.id+')">Del</button>'+
+        '</td></tr>';
+    });
+    document.getElementById('ainews-tbody').innerHTML = rows||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No news yet</td></tr>';
+  });
+}
+
+function openNewsModal(n){
+  editingNewsId = n?n.id:null;
+  document.getElementById('news-modal-title').textContent = n?'Edit News':'Add AI News';
+  document.getElementById('news-headline').value = n?n.headline:'';
+  document.getElementById('news-summary').value  = n?n.summary:'';
+  document.getElementById('news-source').value   = n?n.source:'';
+  document.getElementById('news-img').value      = n?n.featured_image:'';
+  document.getElementById('news-pub').checked    = n?n.published:false;
+  openModal('modal-news');
+}
+
+function editNews(id){
+  db.from('ai_news').select('*').eq('id',id).single().then(function(r){
+    if(r.data) openNewsModal(r.data);
+  });
+}
+
+function saveNews(){
+  var headline = document.getElementById('news-headline').value.trim();
+  var summary  = document.getElementById('news-summary').value.trim();
+  var source   = document.getElementById('news-source').value.trim();
+  var img      = document.getElementById('news-img').value.trim();
+  var pub      = document.getElementById('news-pub').checked;
+  if(!headline){toast('Headline is required','err');return;}
+  var payload  = {headline:headline,summary:summary,source:source,featured_image:img,published:pub};
+  var p = editingNewsId
+    ? db.from('ai_news').update(payload).eq('id',editingNewsId)
+    : db.from('ai_news').insert(payload);
+  p.then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    closeModal('modal-news');
+    toast(editingNewsId?'News updated':'News added');
+    loadAINews();loadDashboard();
+  });
+}
+
+function deleteNews(id){
+  if(!confirm('Delete this news item?'))return;
+  db.from('ai_news').delete().eq('id',id).then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    toast('Deleted');loadAINews();loadDashboard();
+  });
+}
+
+// ── Subscribers ────────────────────────────────────────────────
+function loadSubscribers(){
+  db.from('newsletter_subscribers').select('*').order('subscribed_at',{ascending:false}).then(function(r){
+    var rows='';
+    (r.data||[]).forEach(function(s){
+      rows+='<tr><td>'+esc(s.email)+'</td><td>'+esc(s.name||'')+'</td>'+
+        '<td><span class="pill '+(s.active?'pill-green':'pill-red')+'">'+(s.active?'Active':'Inactive')+'</span></td>'+
+        '<td>'+fmt(s.subscribed_at)+'</td>'+
+        '<td><button class="btn btn-sm btn-danger" onclick="deleteSub('+s.id+')">Remove</button></td></tr>';
+    });
+    document.getElementById('subs-tbody').innerHTML = rows||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:30px">No subscribers yet</td></tr>';
+  });
+}
+
+function deleteSub(id){
+  if(!confirm('Remove this subscriber?'))return;
+  db.from('newsletter_subscribers').delete().eq('id',id).then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    toast('Subscriber removed');loadSubscribers();loadDashboard();
+  });
+}
+
+// ── Users ──────────────────────────────────────────────────────
+function loadUsers(){
+  db.from('profiles').select('*').order('created_at',{ascending:false}).then(function(r){
+    var rows='';
+    (r.data||[]).forEach(function(u){
+      var roleClass = u.role==='admin'?'pill-gold':u.role==='contributor'?'pill-blue':'pill-green';
+      rows+='<tr><td>'+esc(u.full_name||'—')+'</td>'+
+        '<td><span class="pill '+roleClass+'">'+esc(u.role||'reader')+'</span></td>'+
+        '<td>'+fmt(u.created_at)+'</td>'+
+        '<td style="display:flex;gap:6px">'+
+          '<button class="btn btn-sm btn-ghost" onclick="promoteUser(\''+(u.id)+'\')">Promote</button>'+
+        '</td></tr>';
+    });
+    document.getElementById('users-tbody').innerHTML = rows||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px">No users yet</td></tr>';
+  });
+}
+
+function promoteUser(id){
+  var role = prompt('Set role (reader / contributor / admin):','contributor');
+  if(!role||!['reader','contributor','admin'].includes(role))return;
+  db.from('profiles').update({role:role}).eq('id',id).then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    toast('Role updated to '+role);loadUsers();
+  });
+}
+
+// Auto-generate slug from title
+document.getElementById('art-title').addEventListener('input',function(){
+  if(!editingArticleId){
+    document.getElementById('art-slug').value = slug(this.value);
+  }
+});
+</script>
+</body>
+</html>
