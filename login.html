@@ -54,7 +54,6 @@ select option{background:var(--navy-mid);color:var(--white)}
 .lockout-box .ico{font-size:2.2rem;color:var(--error);margin-bottom:.75rem}
 .lockout-box .cdown{font-size:1.6rem;font-weight:700;color:var(--white);margin:.5rem 0}
 .nh-trap{position:absolute;left:-9999px;height:0;overflow:hidden;opacity:0;pointer-events:none}
-/* Password reset pane */
 .reset-box{text-align:center;padding:.5rem 0 1.25rem}
 .reset-box .ico{font-size:2rem;color:var(--gold);margin-bottom:.75rem}
 .reset-box h3{color:var(--white);font-size:1rem;margin-bottom:.35rem}
@@ -71,38 +70,19 @@ select option{background:var(--navy-mid);color:var(--white)}
 </nav>
 <main>
   <div class="card">
-
     <!-- PASSWORD RESET MODE -->
     <div id="reset-mode" style="display:none">
-      <div class="card-top">
-        <div style="padding-bottom:1.25rem;border-bottom:1px solid var(--navy-light);margin-bottom:0">
-          <span style="color:var(--gold);font-weight:600;font-size:.95rem"><i class="fa fa-key"></i> Set New Password</span>
-        </div>
-      </div>
+      <div class="card-top"><div style="padding-bottom:1.25rem;border-bottom:1px solid var(--navy-light);margin-bottom:0"><span style="color:var(--gold);font-weight:600;font-size:.95rem"><i class="fa fa-key"></i> Set New Password</span></div></div>
       <div class="card-body" style="padding-top:1.5rem">
         <div id="alert-rp" class="alert"></div>
-        <div class="reset-box">
-          <div class="ico"><i class="fa fa-key"></i></div>
-          <h3>Create a new password</h3>
-          <p>Enter your new password below and confirm it.</p>
-        </div>
+        <div class="reset-box"><div class="ico"><i class="fa fa-key"></i></div><h3>Create a new password</h3><p>Enter your new password below and confirm it.</p></div>
         <form id="form-rp" onsubmit="doSetPassword(event)">
-          <div class="field">
-            <label class="lbl">New Password</label>
-            <div class="input-wrap">
-              <input type="password" id="rp-pw" placeholder="Min 8 characters" required minlength="8" maxlength="128">
-              <button type="button" class="eye-btn" onclick="toggleEye('rp-pw',this)" tabindex="-1"><i class="fa fa-eye"></i></button>
-            </div>
-          </div>
-          <div class="field">
-            <label class="lbl">Confirm Password</label>
-            <input type="password" id="rp-pw2" placeholder="Re-enter new password" required maxlength="128">
-          </div>
+          <div class="field"><label class="lbl">New Password</label><div class="input-wrap"><input type="password" id="rp-pw" placeholder="Min 8 characters" required minlength="8" maxlength="128"><button type="button" class="eye-btn" onclick="toggleEye('rp-pw',this)" tabindex="-1"><i class="fa fa-eye"></i></button></div></div>
+          <div class="field"><label class="lbl">Confirm Password</label><input type="password" id="rp-pw2" placeholder="Re-enter new password" required maxlength="128"></div>
           <button class="btn btn-gold" id="rp-btn" type="submit">Save New Password</button>
         </form>
       </div>
     </div>
-
     <!-- NORMAL MODE -->
     <div id="normal-mode">
       <div class="card-top">
@@ -113,76 +93,36 @@ select option{background:var(--navy-mid);color:var(--white)}
       </div>
       <div class="card-body">
         <div id="main-alert" class="alert"></div>
-
-        <!-- Lockout screen -->
         <div id="lockout-box" style="display:none" class="lockout-box">
           <div class="ico"><i class="fa fa-lock"></i></div>
           <div>Too many failed attempts.</div>
           <div class="cdown" id="cdown">15:00</div>
           <div style="font-size:.78rem">Please wait before trying again.</div>
         </div>
-
-        <!-- Sign In pane -->
+        <!-- Sign In -->
         <div class="pane on" id="pane0">
           <div class="nh-trap" aria-hidden="true"><input type="text" id="nh_username" tabindex="-1" autocomplete="off"></div>
           <form id="form-login" onsubmit="doLogin(event)">
-            <div class="field">
-              <label class="lbl" for="li-email">Email address</label>
-              <input type="email" id="li-email" placeholder="you@example.com" autocomplete="email" required maxlength="254">
-            </div>
-            <div class="field">
-              <label class="lbl" for="li-pw">Password</label>
-              <div class="input-wrap">
-                <input type="password" id="li-pw" placeholder="Your password" autocomplete="current-password" required maxlength="128">
-                <button type="button" class="eye-btn" onclick="toggleEye('li-pw',this)" tabindex="-1"><i class="fa fa-eye"></i></button>
-              </div>
-            </div>
-            <div class="row-split">
-              <label class="chk-label"><input type="checkbox" id="remember"> Remember me</label>
-              <a href="#" class="text-link" onclick="doForgot(event)">Forgot password?</a>
-            </div>
+            <div class="field"><label class="lbl" for="li-email">Email address</label><input type="email" id="li-email" placeholder="you@example.com" autocomplete="email" required maxlength="254"></div>
+            <div class="field"><label class="lbl" for="li-pw">Password</label><div class="input-wrap"><input type="password" id="li-pw" placeholder="Your password" autocomplete="current-password" required maxlength="128"><button type="button" class="eye-btn" onclick="toggleEye('li-pw',this)" tabindex="-1"><i class="fa fa-eye"></i></button></div></div>
+            <div class="row-split"><label class="chk-label"><input type="checkbox" id="remember"> Remember me</label><a href="#" class="text-link" onclick="doForgot(event)">Forgot password?</a></div>
             <button class="btn btn-gold" id="li-btn" type="submit">Sign In</button>
           </form>
           <div class="divider">or continue with</div>
-          <button class="btn btn-outline" id="google-btn" onclick="doGoogle()">
-            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Continue with Google
-          </button>
+          <button class="btn btn-outline" id="google-btn" onclick="doGoogle()"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google</button>
         </div>
-
-        <!-- Create Account pane -->
+        <!-- Create Account -->
         <div class="pane" id="pane1">
           <div class="nh-trap" aria-hidden="true"><input type="text" id="nh_website" tabindex="-1" autocomplete="off"></div>
           <form id="form-signup" onsubmit="doSignup(event)">
-            <div class="field">
-              <label class="lbl" for="su-name">Full name</label>
-              <input type="text" id="su-name" placeholder="Your full name" autocomplete="name" required maxlength="100">
-            </div>
-            <div class="field">
-              <label class="lbl" for="su-email">Email address</label>
-              <input type="email" id="su-email" placeholder="you@example.com" autocomplete="email" required maxlength="254">
-            </div>
-            <div class="field">
-              <label class="lbl" for="su-pw">Password</label>
-              <div class="input-wrap">
-                <input type="password" id="su-pw" placeholder="Min 8 characters" autocomplete="new-password" required minlength="8" maxlength="128">
-                <button type="button" class="eye-btn" onclick="toggleEye('su-pw',this)" tabindex="-1"><i class="fa fa-eye"></i></button>
-              </div>
-            </div>
-            <div class="field">
-              <label class="lbl" for="su-pw2">Confirm password</label>
-              <input type="password" id="su-pw2" placeholder="Re-enter password" required maxlength="128">
-            </div>
-            <div class="field">
-              <label class="lbl" for="su-role">I am a</label>
-              <select id="su-role">
-                <option value="reader">Reader — browse &amp; comment</option>
-                <option value="contributor">Contributor — submit articles</option>
-              </select>
-            </div>
+            <div class="field"><label class="lbl" for="su-name">Full name</label><input type="text" id="su-name" placeholder="Your full name" autocomplete="name" required maxlength="100"></div>
+            <div class="field"><label class="lbl" for="su-email">Email address</label><input type="email" id="su-email" placeholder="you@example.com" autocomplete="email" required maxlength="254"></div>
+            <div class="field"><label class="lbl" for="su-pw">Password</label><div class="input-wrap"><input type="password" id="su-pw" placeholder="Min 8 characters" autocomplete="new-password" required minlength="8" maxlength="128"><button type="button" class="eye-btn" onclick="toggleEye('su-pw',this)" tabindex="-1"><i class="fa fa-eye"></i></button></div></div>
+            <div class="field"><label class="lbl" for="su-pw2">Confirm password</label><input type="password" id="su-pw2" placeholder="Re-enter password" required maxlength="128"></div>
+            <div class="field"><label class="lbl" for="su-role">I am a</label><select id="su-role"><option value="reader">Reader — browse &amp; comment</option><option value="contributor">Contributor — submit articles</option></select></div>
             <div class="terms-row">
               <input type="checkbox" id="su-terms" required>
-              <span>I agree to the <a href="#" class="text-link">Terms of Service</a> and <a href="#" class="text-link">Privacy Policy</a></span>
+              <span>I have read and agree to the <a href="terms.html" target="_blank" class="text-link">Terms of Service</a> and <a href="privacy.html" target="_blank" class="text-link">Privacy Policy</a></span>
             </div>
             <button class="btn btn-gold" id="su-btn" type="submit">Create Account</button>
           </form>
@@ -191,240 +131,117 @@ select option{background:var(--navy-mid);color:var(--white)}
     </div>
   </div>
 </main>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="security.js"></script>
 <script>
 'use strict';
-var _lockTimer = null;
-
-// ── Helpers ──────────────────────────────────────────────────────
-function showAlert(msg, type) {
-  var el = document.getElementById('main-alert');
-  el.textContent = msg;
-  el.className = 'alert ' + (type || 'err');
+var _lockTimer=null;
+function switchTab(i){['tab0','tab1'].forEach(function(tid,j){document.getElementById(tid).classList.toggle('on',i===j);});['pane0','pane1'].forEach(function(pid,j){document.getElementById(pid).classList.toggle('on',i===j);});hideAlert();}
+function showAlert(msg,type){var el=document.getElementById('main-alert');el.textContent=msg;el.className='alert '+(type||'err');}
+function hideAlert(){var el=document.getElementById('main-alert');if(el)el.className='alert';}
+function showAlertRP(msg,type){var el=document.getElementById('alert-rp');el.textContent=msg;el.className='alert '+(type||'err');}
+function setBusy(id,busy,label){var btn=document.getElementById(id);if(!btn)return;btn.disabled=busy;btn.innerHTML=busy?'<span class="spin"></span> Please wait…':label;}
+function toggleEye(id,btn){var el=document.getElementById(id);var isPass=el.type==='password';el.type=isPass?'text':'password';btn.querySelector('i').className='fa fa-eye'+(isPass?'-slash':'');}
+function friendly(msg){
+  if(!msg)return'Something went wrong. Please try again.';
+  var m=msg.toLowerCase();
+  if(m.includes('invalid login')||m.includes('invalid_credentials')||m.includes('invalid email or password'))return'Incorrect email or password. Please check and try again.';
+  if(m.includes('email not confirmed'))return'Your email is not confirmed yet. Please check your inbox and click the confirmation link.';
+  if(m.includes('already registered')||m.includes('user already registered'))return'This email is already registered. Try signing in instead.';
+  if(m.includes('weak')||m.includes('password should be'))return'Password is too weak. Use at least 8 characters.';
+  if(m.includes('rate limit')||m.includes('too many requests'))return'Too many requests. Please wait a few minutes and try again.';
+  if(m.includes('network')||m.includes('fetch'))return'Network error. Please check your internet connection and try again.';
+  return'Error: '+msg;
 }
-function hideAlert() {
-  var el = document.getElementById('main-alert');
-  if (el) el.className = 'alert';
+function showLockout(mins){
+  document.getElementById('lockout-box').style.display='block';
+  document.getElementById('pane0').style.display='none';
+  document.getElementById('pane1').style.display='none';
+  var secs=mins*60;clearInterval(_lockTimer);
+  _lockTimer=setInterval(function(){secs--;if(secs<=0){clearInterval(_lockTimer);location.reload();return;}var m=Math.floor(secs/60),s=secs%60;document.getElementById('cdown').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;},1000);
 }
-function showAlertRP(msg, type) {
-  var el = document.getElementById('alert-rp');
-  el.textContent = msg;
-  el.className = 'alert ' + (type || 'err');
-}
-function setBusy(id, busy, label) {
-  var btn = document.getElementById(id);
-  if (!btn) return;
-  btn.disabled = busy;
-  btn.innerHTML = busy ? '<span class="spin"></span> Please wait…' : label;
-}
-function toggleEye(id, btn) {
-  var el = document.getElementById(id);
-  var isPass = el.type === 'password';
-  el.type = isPass ? 'text' : 'password';
-  btn.querySelector('i').className = 'fa fa-eye' + (isPass ? '-slash' : '');
-}
-function switchTab(i) {
-  ['tab0','tab1'].forEach(function(tid, j) {
-    document.getElementById(tid).classList.toggle('on', i === j);
-  });
-  ['pane0','pane1'].forEach(function(pid, j) {
-    document.getElementById(pid).classList.toggle('on', i === j);
-  });
-  hideAlert();
-}
-function friendly(msg) {
-  if (!msg) return 'Something went wrong. Please try again.';
-  var m = msg.toLowerCase();
-  if (m.includes('invalid login') || m.includes('invalid_credentials') || m.includes('invalid email or password'))
-    return 'Incorrect email or password. Please check and try again.';
-  if (m.includes('email not confirmed'))
-    return 'Your email is not confirmed. Check your inbox for a confirmation email, then try again.';
-  if (m.includes('already registered') || m.includes('user already registered'))
-    return 'This email is already registered. Try signing in instead.';
-  if (m.includes('weak') || m.includes('password should be'))
-    return 'Password is too weak. Use at least 8 characters.';
-  if (m.includes('rate limit') || m.includes('too many requests'))
-    return 'Too many requests. Please wait a few minutes and try again.';
-  if (m.includes('network') || m.includes('fetch'))
-    return 'Network error. Please check your internet connection.';
-  return 'Error: ' + msg;
-}
-function showLockout(mins) {
-  document.getElementById('lockout-box').style.display = 'block';
-  document.getElementById('pane0').style.display = 'none';
-  document.getElementById('pane1').style.display = 'none';
-  var secs = mins * 60;
-  clearInterval(_lockTimer);
-  _lockTimer = setInterval(function() {
-    secs--;
-    if (secs <= 0) { clearInterval(_lockTimer); location.reload(); return; }
-    var m = Math.floor(secs / 60), s = secs % 60;
-    document.getElementById('cdown').textContent =
-      (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-  }, 1000);
-}
-
-// ── Auth redirect ────────────────────────────────────────────────
-async function afterAuth(session) {
+async function afterAuth(session){
   NHSec.clearRate();
-  var user = session.user;
-  var isAdmin = user.email === ADMIN_EMAIL;
-  var role = isAdmin ? 'admin' : ((user.user_metadata && user.user_metadata.role) || 'reader');
-  try {
-    await db.from('profiles').upsert({
-      id: user.id,
-      full_name: (user.user_metadata && user.user_metadata.full_name) || user.email.split('@')[0],
-      role: role,
-      avatar_url: (user.user_metadata && user.user_metadata.avatar_url) || null
-    }, { onConflict: 'id' });
-  } catch(e) {}
-  window.location.replace(isAdmin ? '_nh_ctrl_panel.html' : 'index.html');
+  var user=session.user;
+  var isAdmin=user.email===ADMIN_EMAIL;
+  var role=isAdmin?'admin':((user.user_metadata&&user.user_metadata.role)||'reader');
+  try{await db.from('profiles').upsert({id:user.id,full_name:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],role:role,avatar_url:(user.user_metadata&&user.user_metadata.avatar_url)||null},{onConflict:'id'});}catch(e){}
+  window.location.replace(isAdmin?'_nh_ctrl_panel.html':'index.html');
 }
-
-// ── Password reset (from email link) ────────────────────────────
-async function doSetPassword(e) {
+async function doSetPassword(e){
   e.preventDefault();
-  var pw  = document.getElementById('rp-pw').value;
-  var pw2 = document.getElementById('rp-pw2').value;
-  if (pw !== pw2) { showAlertRP('Passwords do not match.'); return; }
-  if (pw.length < 8) { showAlertRP('Password must be at least 8 characters.'); return; }
-  setBusy('rp-btn', true, 'Save New Password');
-  try {
-    var res = await db.auth.updateUser({ password: pw });
-    if (res.error) { showAlertRP(friendly(res.error.message)); setBusy('rp-btn', false, 'Save New Password'); return; }
-    showAlertRP('Password updated! Signing you in…', 'ok');
-    setTimeout(function() { afterAuth(res.data.session || { user: res.data.user }); }, 1200);
-  } catch(err) {
-    showAlertRP('Error: ' + (err.message || 'Could not update password.'));
-    setBusy('rp-btn', false, 'Save New Password');
-  }
+  var pw=document.getElementById('rp-pw').value,pw2=document.getElementById('rp-pw2').value;
+  if(pw!==pw2){showAlertRP('Passwords do not match.');return;}
+  if(pw.length<8){showAlertRP('Password must be at least 8 characters.');return;}
+  setBusy('rp-btn',true,'Save New Password');
+  try{
+    var res=await db.auth.updateUser({password:pw});
+    if(res.error){showAlertRP(friendly(res.error.message));setBusy('rp-btn',false,'Save New Password');return;}
+    showAlertRP('Password updated! Signing you in…','ok');
+    setTimeout(function(){afterAuth(res.data.session||{user:res.data.user});},1200);
+  }catch(err){showAlertRP('Error: '+(err.message||'Could not update password.'));setBusy('rp-btn',false,'Save New Password');}
 }
-
-// ── Sign In ──────────────────────────────────────────────────────
-async function doLogin(e) {
-  e.preventDefault();
-  hideAlert();
-  try {
-    if (typeof db === 'undefined') { showAlert('Cannot connect to server. Please reload the page.'); return; }
-    if (NHSec.honeyFilled('nh_username')) return;
-    var rl = NHSec.checkRate();
-    if (!rl.allowed) { showLockout(rl.mins); return; }
-    var email    = NHSec.sanitize(document.getElementById('li-email').value);
-    var password = document.getElementById('li-pw').value;
-    if (!NHSec.validEmail(email)) { showAlert('Please enter a valid email address.'); return; }
-    if (!password) { showAlert('Please enter your password.'); return; }
-    setBusy('li-btn', true, 'Sign In');
-    var res = await db.auth.signInWithPassword({ email: email, password: password });
-    if (res.error) {
-      NHSec.recordFail();
-      var rl2 = NHSec.checkRate();
-      if (!rl2.allowed) { showLockout(rl2.mins); return; }
-      showAlert(friendly(res.error.message));
-      setBusy('li-btn', false, 'Sign In');
-      return;
-    }
+async function doLogin(e){
+  e.preventDefault();hideAlert();
+  try{
+    if(typeof db==='undefined'){showAlert('Cannot connect to server. Please reload the page.');return;}
+    if(NHSec.honeyFilled('nh_username'))return;
+    var rl=NHSec.checkRate();if(!rl.allowed){showLockout(rl.mins);return;}
+    var email=NHSec.sanitize(document.getElementById('li-email').value);
+    var password=document.getElementById('li-pw').value;
+    if(!NHSec.validEmail(email)){showAlert('Please enter a valid email address.');return;}
+    if(!password){showAlert('Please enter your password.');return;}
+    setBusy('li-btn',true,'Sign In');
+    var res=await db.auth.signInWithPassword({email:email,password:password});
+    if(res.error){NHSec.recordFail();var rl2=NHSec.checkRate();if(!rl2.allowed){showLockout(rl2.mins);return;}showAlert(friendly(res.error.message));setBusy('li-btn',false,'Sign In');return;}
     await afterAuth(res.data.session);
-  } catch(err) {
-    console.error('Login exception:', err);
-    showAlert('Connection error: ' + (err.message || 'Please reload and try again.'));
-    setBusy('li-btn', false, 'Sign In');
-  }
+  }catch(err){console.error('Login error:',err);showAlert('Connection error: '+(err.message||'Please reload and try again.'));setBusy('li-btn',false,'Sign In');}
 }
-
-// ── Sign Up ──────────────────────────────────────────────────────
-async function doSignup(e) {
-  e.preventDefault();
+async function doSignup(e){
+  e.preventDefault();hideAlert();
+  try{
+    if(typeof db==='undefined'){showAlert('Cannot connect to server. Please reload the page.');return;}
+    if(NHSec.honeyFilled('nh_website'))return;
+    var name=NHSec.sanitize(document.getElementById('su-name').value);
+    var email=NHSec.sanitize(document.getElementById('su-email').value);
+    var pw=document.getElementById('su-pw').value;
+    var pw2=document.getElementById('su-pw2').value;
+    var role=document.getElementById('su-role').value;
+    if(!NHSec.validEmail(email)){showAlert('Please enter a valid email address.');return;}
+    if(pw!==pw2){showAlert('Passwords do not match.');return;}
+    if(pw.length<8){showAlert('Password must be at least 8 characters.');return;}
+    setBusy('su-btn',true,'Create Account');
+    var res=await db.auth.signUp({email:email,password:pw,options:{data:{full_name:name,role:role}}});
+    if(res.error){showAlert(friendly(res.error.message));setBusy('su-btn',false,'Create Account');return;}
+    if(res.data.session){await afterAuth(res.data.session);return;}
+    showAlert('Account created! Check your email inbox for a confirmation link, then come back and sign in.','ok');
+    setBusy('su-btn',false,'Create Account');
+  }catch(err){console.error('Signup error:',err);showAlert('Connection error: '+(err.message||'Please reload and try again.'));setBusy('su-btn',false,'Create Account');}
+}
+async function doForgot(e){
+  e.preventDefault();hideAlert();
+  var email=NHSec.sanitize(document.getElementById('li-email').value);
+  if(!email||!NHSec.validEmail(email)){showAlert('Enter your email address in the field above first, then click Forgot password.');return;}
+  try{
+    var res=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://abdirizak1212.github.io/Project/login.html'});
+    if(res.error){showAlert(friendly(res.error.message));return;}
+    showAlert('Password reset email sent! Check your inbox and click the link.','ok');
+  }catch(err){showAlert('Error: '+(err.message||'Could not send reset email.'));}
+}
+async function doGoogle(){
   hideAlert();
-  try {
-    if (typeof db === 'undefined') { showAlert('Cannot connect to server. Please reload the page.'); return; }
-    if (NHSec.honeyFilled('nh_website')) return;
-    var name  = NHSec.sanitize(document.getElementById('su-name').value);
-    var email = NHSec.sanitize(document.getElementById('su-email').value);
-    var pw    = document.getElementById('su-pw').value;
-    var pw2   = document.getElementById('su-pw2').value;
-    var role  = document.getElementById('su-role').value;
-    if (!NHSec.validEmail(email)) { showAlert('Please enter a valid email address.'); return; }
-    if (pw !== pw2) { showAlert('Passwords do not match.'); return; }
-    if (pw.length < 8) { showAlert('Password must be at least 8 characters.'); return; }
-    setBusy('su-btn', true, 'Create Account');
-    var res = await db.auth.signUp({ email: email, password: pw, options: { data: { full_name: name, role: role } } });
-    if (res.error) { showAlert(friendly(res.error.message)); setBusy('su-btn', false, 'Create Account'); return; }
-    if (res.data.session) { await afterAuth(res.data.session); return; }
-    showAlert('Account created! Check your email inbox for a confirmation link, then come back and sign in.', 'ok');
-    setBusy('su-btn', false, 'Create Account');
-  } catch(err) {
-    console.error('Signup exception:', err);
-    showAlert('Connection error: ' + (err.message || 'Please reload and try again.'));
-    setBusy('su-btn', false, 'Create Account');
-  }
+  try{
+    var res=await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://abdirizak1212.github.io/Project/login.html'}});
+    if(res.error)showAlert(friendly(res.error.message));
+  }catch(err){showAlert('Error: '+(err.message||'Google sign-in failed.'));}
 }
-
-// ── Forgot password ──────────────────────────────────────────────
-async function doForgot(e) {
-  e.preventDefault();
-  hideAlert();
-  var email = NHSec.sanitize(document.getElementById('li-email').value);
-  if (!email || !NHSec.validEmail(email)) {
-    showAlert('Enter your email address in the field above first, then click Forgot password.');
-    return;
-  }
-  try {
-    var res = await db.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://abdirizak1212.github.io/Project/login.html'
-    });
-    if (res.error) { showAlert(friendly(res.error.message)); return; }
-    showAlert('Password reset email sent! Check your inbox and click the link.', 'ok');
-  } catch(err) {
-    showAlert('Error: ' + (err.message || 'Could not send reset email.'));
-  }
-}
-
-// ── Google OAuth ─────────────────────────────────────────────────
-async function doGoogle() {
-  hideAlert();
-  try {
-    var res = await db.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: 'https://abdirizak1212.github.io/Project/login.html' }
-    });
-    if (res.error) showAlert(friendly(res.error.message));
-  } catch(err) {
-    showAlert('Error: ' + (err.message || 'Google sign-in failed.'));
-  }
-}
-
-// ── Init ─────────────────────────────────────────────────────────
-
-// 1. Check if Supabase loaded
-if (typeof db === 'undefined') {
-  document.getElementById('main-alert').textContent =
-    'Could not connect to server. Please reload the page.';
-  document.getElementById('main-alert').className = 'alert err';
-}
-
-// 2. Rate limit check
-try {
-  var _rl = NHSec.checkRate();
-  if (!_rl.allowed) showLockout(_rl.mins);
-} catch(e) {}
-
-// 3. Detect password recovery from URL hash
-db.auth.onAuthStateChange(function(event, session) {
-  if (event === 'PASSWORD_RECOVERY') {
-    document.getElementById('normal-mode').style.display = 'none';
-    document.getElementById('reset-mode').style.display  = 'block';
-  } else if (event === 'SIGNED_IN' && session) {
-    var h = window.location.hash || '';
-    if (!h.includes('type=recovery')) {
-      afterAuth(session);
-    }
-  }
+if(typeof db==='undefined'){document.getElementById('main-alert').textContent='Could not connect to server. Please reload the page.';document.getElementById('main-alert').className='alert err';}
+try{var _rl=NHSec.checkRate();if(!_rl.allowed)showLockout(_rl.mins);}catch(e){}
+db.auth.onAuthStateChange(function(event,session){
+  if(event==='PASSWORD_RECOVERY'){document.getElementById('normal-mode').style.display='none';document.getElementById('reset-mode').style.display='block';}
+  else if(event==='SIGNED_IN'&&session){var h=window.location.hash||'';if(!h.includes('type=recovery')){afterAuth(session);}}
 });
-
-// 4. Visibility guard
 NHSec.initVisibilityGuard(['li-pw','su-pw','su-pw2','rp-pw','rp-pw2']);
 </script>
 </body>
