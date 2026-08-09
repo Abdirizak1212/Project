@@ -1,6 +1,4 @@
-/* =========================================================
-   Nadaara Hub — main.js
-   ========================================================= */
+/* Nadaara Hub — main.js */
 
 window.addEventListener('scroll', () => {
   const navbar = document.getElementById('navbar');
@@ -26,7 +24,7 @@ function toggleSearch() {
 
 function runSearch() {
   const query = document.getElementById('searchInput')?.value.trim();
-  if (query) { alert(`Searching for: "${query}"\n\n(Search functionality coming soon!)`); toggleSearch(); }
+  if (query) { showToast('Search coming soon — use Ctrl+F for now.'); toggleSearch(); }
 }
 
 document.addEventListener('keydown', (e) => {
@@ -40,11 +38,11 @@ function updateReadingProgress() {
   if (!article) {
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (docHeight > 0) bar.style.width = `${Math.min((scrollTop / docHeight) * 100, 100)}%`;
+    if (docHeight > 0) bar.style.width = Math.min((scrollTop / docHeight) * 100, 100) + '%';
     return;
   }
   const pct = Math.max(0, Math.min(((window.scrollY - article.offsetTop) / article.offsetHeight) * 100, 100));
-  bar.style.width = `${pct}%`;
+  bar.style.width = pct + '%';
 }
 
 function updateFloatShare() {
@@ -56,16 +54,16 @@ function sharePost(platform) {
   const url = encodeURIComponent(window.location.href);
   const title = encodeURIComponent(document.title);
   const urls = {
-    twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    whatsapp: `https://api.whatsapp.com/send?text=${title}%20${url}`,
+    twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+    linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + url,
+    whatsapp: 'https://api.whatsapp.com/send?text=' + title + '%20' + url,
   };
   if (urls[platform]) window.open(urls[platform], '_blank', 'width=600,height=400');
 }
 
 function copyLink() {
-  navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied to clipboard!'));
+  navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied!'));
 }
 
 function showToast(message) {
@@ -73,7 +71,7 @@ function showToast(message) {
   if (existing) existing.remove();
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+  toast.innerHTML = '<i class="fas fa-check-circle"></i> ' + message;
   document.body.appendChild(toast);
   requestAnimationFrame(() => {
     toast.classList.add('show');
@@ -83,57 +81,60 @@ function showToast(message) {
 
 async function subscribeNewsletter(e) {
   e.preventDefault();
-  const form = e.target;
-  const btn = form.querySelector('button[type="submit"]') || document.getElementById('nl-submit-btn');
-  const alertEl = document.getElementById('nl-alert');
-  const emailEl = form.querySelector('input[type="email"]') || document.getElementById('nl-email');
-  const nameEl = form.querySelector('input[type="text"]') || document.getElementById('nl-name');
-  const email = emailEl ? emailEl.value.trim() : '';
-  const name = nameEl ? nameEl.value.trim() : '';
-
+  const form     = e.target;
+  const btn      = form.querySelector('button[type="submit"]') || document.getElementById('nl-submit-btn');
+  const alertEl  = document.getElementById('nl-alert');
+  const emailEl  = form.querySelector('input[type="email"]');
+  const nameEl   = form.querySelector('input[type="text"]');
+  const email    = emailEl ? emailEl.value.trim() : '';
+  const name     = nameEl  ? nameEl.value.trim()  : '';
   if (!email) return;
 
   const originalText = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing…'; btn.disabled = true; }
 
   function showNlAlert(msg, ok) {
-    if (alertEl) {
-      alertEl.textContent = msg;
-      alertEl.style.display = 'block';
-      alertEl.style.background = ok ? 'rgba(40,167,69,.15)' : 'rgba(220,53,69,.15)';
-      alertEl.style.color = ok ? '#28a745' : '#dc3545';
-      alertEl.style.border = ok ? '1px solid #28a74540' : '1px solid #dc354540';
-    }
+    if (!alertEl) return;
+    alertEl.textContent    = msg;
+    alertEl.style.display  = 'block';
+    alertEl.style.background  = ok ? 'rgba(40,167,69,.15)' : 'rgba(220,53,69,.15)';
+    alertEl.style.color       = ok ? '#28a745' : '#dc3545';
+    alertEl.style.border      = ok ? '1px solid #28a74540' : '1px solid #dc354540';
+    alertEl.style.padding     = '.6rem 1rem';
+    alertEl.style.borderRadius = '8px';
+    alertEl.style.fontSize    = '.88rem';
+    alertEl.style.marginBottom = '1rem';
   }
 
   try {
     if (typeof db !== 'undefined') {
-      const { error } = await db.from('newsletter_subscribers').insert({ email, name: name || null });
+      const { error } = await db.from('newsletter_subscribers').insert({
+        email:  email,
+        name:   name || null,
+        active: true
+      });
       if (error) {
         if (error.code === '23505') {
-          showNlAlert('You are already subscribed. Thank you!', true);
+          showNlAlert('You are already subscribed — thank you!', true);
           showToast('Already subscribed!');
         } else {
           throw new Error(error.message);
         }
       } else {
-        showNlAlert('Welcome aboard! You will receive our next edition on Thursday.', true);
+        showNlAlert('You are subscribed! Welcome to Nadaara Hub.', true);
         showToast('Subscribed to Nadaara Hub!');
         form.reset();
       }
     } else {
       await new Promise(r => setTimeout(r, 1200));
-      showNlAlert('Subscribed! Check your inbox for a welcome email.', true);
-      showToast('Welcome to Nadaara Hub!');
+      showNlAlert('Subscribed! Welcome to Nadaara Hub.', true);
+      showToast('Subscribed!');
       form.reset();
     }
   } catch (err) {
-    showNlAlert('Could not subscribe right now. Please try again.', false);
-    showToast('Subscription failed — please try again.');
+    showNlAlert('Could not subscribe right now — please try again in a moment.', false);
   } finally {
-    if (btn) {
-      setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000);
-    }
+    if (btn) setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3500);
   }
 }
 
@@ -149,7 +150,7 @@ function setFilter(cat, btn) {
   });
 }
 
-function sortPosts(val) { showToast(`Sorted by: ${val.charAt(0).toUpperCase() + val.slice(1)}`); }
+function sortPosts(val) { showToast('Sorted by: ' + val.charAt(0).toUpperCase() + val.slice(1)); }
 
 function setAIFilter(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -164,7 +165,7 @@ function loadMoreAI() { showToast('Loading more AI news…'); }
 let liked = false;
 function toggleLike() {
   liked = !liked;
-  const btn = document.getElementById('likeBtn');
+  const btn   = document.getElementById('likeBtn');
   const count = document.getElementById('likeCount');
   if (!btn || !count) return;
   count.textContent = liked ? parseInt(count.textContent) + 1 : parseInt(count.textContent) - 1;
@@ -172,20 +173,7 @@ function toggleLike() {
   if (liked) showToast('You liked this article!');
 }
 
-function submitComment(e) { e.preventDefault(); showToast('Comment submitted! It will appear after moderation.'); e.target.reset(); }
-
-function submitContact(e) {
-  e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
-  const original = btn.innerHTML;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-    showToast('Message received! We\'ll reply within 24-48 hours.');
-    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; e.target.reset(); }, 3000);
-  }, 1500);
-}
+function submitComment(e) { e.preventDefault(); showToast('Comment submitted — it will appear after review.'); e.target.reset(); }
 
 function toggleFaq(item) {
   const isOpen = item.classList.contains('open');
@@ -193,7 +181,7 @@ function toggleFaq(item) {
   if (!isOpen) item.classList.add('open');
 }
 
-function openEdition(num) { showToast(`Opening edition #${num}… (Archive viewer coming soon!)`); }
+function openEdition(num) { showToast('Edition #' + num + ' — archive viewer coming soon!'); }
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); revealObserver.unobserve(entry.target); } });

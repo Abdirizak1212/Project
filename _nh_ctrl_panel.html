@@ -177,6 +177,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>AI News
       </a>
       <div class="sb-section">Community</div>
+      <a href="#" data-page="messages" onclick="nav(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Messages <span id="msg-badge" style="margin-left:auto;background:#d93025;color:#fff;border-radius:20px;font-size:10px;padding:1px 7px;font-weight:700;display:none"></span>
+      </a>
       <a href="#" data-page="subscribers" onclick="nav(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"/></svg>Newsletter
       </a>
@@ -209,6 +213,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           <div class="stat-card"><div class="label">Articles</div><div class="value" id="s-articles">—</div><div class="sub">total published</div></div>
           <div class="stat-card"><div class="label">AI News</div><div class="value" id="s-ainews">—</div><div class="sub">total items</div></div>
           <div class="stat-card"><div class="label">Subscribers</div><div class="value" id="s-subs">—</div><div class="sub">newsletter</div></div>
+          <div class="stat-card" style="cursor:pointer" onclick="navTo('messages')"><div class="label">New Messages</div><div class="value" id="s-msgs">—</div><div class="sub">unread contact</div></div>
           <div class="stat-card"><div class="label">Users</div><div class="value" id="s-users">—</div><div class="sub">registered</div></div>
         </div>
         <div class="table-wrap">
@@ -248,6 +253,29 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         <div class="table-wrap">
           <table><thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
           <tbody id="subs-tbody"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="page" id="page-messages">
+        <div class="section-header"><h2>Contact Messages</h2><span style="color:var(--muted);font-size:13px">Click a row to expand the full message</span></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Preview</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="msgs-tbody"><tr><td colspan="7" class="loading"><div class="spinner"></div></td></tr></tbody></table>
+        </div>
+        <!-- Message detail panel -->
+        <div id="msg-detail" style="display:none;margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <strong id="md-subject" style="font-size:15px"></strong>
+            <button class="btn btn-sm btn-ghost" onclick="document.getElementById('msg-detail').style.display='none'">Close</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:16px">
+            From: <strong id="md-name"></strong> &lt;<a id="md-email" href="#" style="color:var(--gold)"></a>&gt;
+          </div>
+          <p id="md-body" style="font-size:14px;line-height:1.8;white-space:pre-wrap;color:var(--text)"></p>
+          <div style="margin-top:16px">
+            <a id="md-reply" href="#" class="btn btn-primary btn-sm" style="text-decoration:none"><i class="fas fa-reply"></i> Reply via Email</a>
+          </div>
         </div>
       </div>
 
@@ -347,18 +375,24 @@ db.auth.getSession().then(function(r){
 
 // ── Navigation ─────────────────────────────────────────────────
 function nav(el){
-  document.querySelectorAll('#sb-nav a').forEach(function(a){a.classList.remove('active')});
+  document.querySelectorAll('#sb-nav a[data-page]').forEach(function(a){a.classList.remove('active')});
   el.classList.add('active');
   var page = el.getAttribute('data-page');
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.getElementById('page-'+page).classList.add('active');
-  var titles = {dashboard:'Dashboard',articles:'Articles',ainews:'AI News',subscribers:'Newsletter',users:'Users'};
+  var titles = {dashboard:'Dashboard',articles:'Articles',ainews:'AI News',messages:'Messages',subscribers:'Newsletter Subscribers',users:'Users'};
   document.getElementById('page-title').textContent = titles[page]||page;
   if(page==='articles')   loadArticles();
   if(page==='ainews')     loadAINews();
+  if(page==='messages')   loadMessages();
   if(page==='subscribers')loadSubscribers();
   if(page==='users')      loadUsers();
   return false;
+}
+
+function navTo(page){
+  var el = document.querySelector('#sb-nav a[data-page="'+page+'"]');
+  if(el) nav(el);
 }
 
 // ── Toast ──────────────────────────────────────────────────────
@@ -394,21 +428,26 @@ function loadDashboard(){
   Promise.all([
     db.from('articles').select('id',{count:'exact',head:true}).eq('published',true),
     db.from('ai_news').select('id',{count:'exact',head:true}),
-    db.from('newsletter_subscribers').select('id',{count:'exact',head:true}).eq('active',true),
+    db.from('newsletter_subscribers').select('id',{count:'exact',head:true}),
+    db.from('contact_messages').select('id',{count:'exact',head:true}).eq('read',false),
     db.from('profiles').select('id',{count:'exact',head:true}),
     db.from('articles').select('id,title,category,published,created_at').order('created_at',{ascending:false}).limit(8)
   ]).then(function(res){
     document.getElementById('s-articles').textContent = res[0].count||0;
     document.getElementById('s-ainews').textContent   = res[1].count||0;
     document.getElementById('s-subs').textContent     = res[2].count||0;
-    document.getElementById('s-users').textContent    = res[3].count||0;
+    var unread = res[3].count||0;
+    document.getElementById('s-msgs').textContent     = unread;
+    document.getElementById('s-users').textContent    = res[4].count||0;
+    var badge = document.getElementById('msg-badge');
+    if(badge){ badge.textContent = unread; badge.style.display = unread>0?'inline':'none'; }
     var rows = '';
-    (res[4].data||[]).forEach(function(a){
+    (res[5].data||[]).forEach(function(a){
       rows += '<tr><td>'+esc(a.title)+'</td><td>'+esc(a.category||'')+'</td>'+
               '<td><span class="pill '+(a.published?'pill-green':'pill-red')+'">'+(a.published?'Published':'Draft')+'</span></td>'+
               '<td>'+fmt(a.created_at)+'</td></tr>';
     });
-    document.getElementById('dash-articles').innerHTML = rows||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px">No articles yet</td></tr>';
+    document.getElementById('dash-articles').innerHTML = rows||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px">No articles yet. Use Articles section to add your first post.</td></tr>';
   });
 }
 
@@ -586,6 +625,56 @@ function promoteUser(id){
   db.from('profiles').update({role:role}).eq('id',id).then(function(r){
     if(r.error){toast('Error: '+r.error.message,'err');return;}
     toast('Role updated to '+role);loadUsers();
+  });
+}
+
+// ── Contact Messages ───────────────────────────────────────────
+function loadMessages(){
+  db.from('contact_messages').select('*').order('created_at',{ascending:false}).then(function(r){
+    var rows='';
+    (r.data||[]).forEach(function(m){
+      var isNew = !m.read;
+      rows += '<tr style="'+(isNew?'font-weight:600':'')+'" onclick="showMsgDetail('+JSON.stringify(m).replace(/"/g,'&quot;')+')" style="cursor:pointer">'+
+        '<td>'+esc(m.name||'')+'</td>'+
+        '<td><a href="mailto:'+esc(m.email||'')+'" style="color:var(--gold)" onclick="event.stopPropagation()">'+esc(m.email||'')+'</a></td>'+
+        '<td>'+esc(m.subject||'')+'</td>'+
+        '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">'+esc((m.message||'').substring(0,80))+'</td>'+
+        '<td><span class="pill '+(isNew?'pill-gold':'pill-green')+'">'+(isNew?'New':'Read')+'</span></td>'+
+        '<td>'+fmt(m.created_at)+'</td>'+
+        '<td onclick="event.stopPropagation()" style="display:flex;gap:6px">'+
+          (isNew?'<button class="btn btn-sm btn-ghost" onclick="markRead('+m.id+')">Mark Read</button>':'')+
+          '<button class="btn btn-sm btn-danger" onclick="deleteMsg('+m.id+')">Del</button>'+
+        '</td></tr>';
+    });
+    document.getElementById('msgs-tbody').innerHTML = rows||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No messages yet</td></tr>';
+  });
+}
+
+function showMsgDetail(m){
+  document.getElementById('md-subject').textContent = m.subject||'(no subject)';
+  document.getElementById('md-name').textContent    = m.name||'';
+  document.getElementById('md-email').textContent   = m.email||'';
+  document.getElementById('md-email').href          = 'mailto:'+m.email;
+  document.getElementById('md-body').textContent    = m.message||'';
+  document.getElementById('md-reply').href          = 'mailto:'+m.email+'?subject=Re: '+encodeURIComponent(m.subject||'Your message');
+  document.getElementById('msg-detail').style.display = 'block';
+  if(!m.read) markRead(m.id);
+}
+
+function markRead(id){
+  db.from('contact_messages').update({read:true}).eq('id',id).then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    toast('Marked as read');loadMessages();loadDashboard();
+  });
+}
+
+function deleteMsg(id){
+  if(!confirm('Delete this message permanently?'))return;
+  db.from('contact_messages').delete().eq('id',id).then(function(r){
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    toast('Message deleted');
+    document.getElementById('msg-detail').style.display='none';
+    loadMessages();loadDashboard();
   });
 }
 
