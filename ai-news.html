@@ -41,30 +41,54 @@
           <button class="filter-btn" onclick="setAIFilter('education',this)">Edu AI</button>
         </div>
       </div>
-      <div class="ai-featured reveal">
-        <div class="ai-featured-content">
-          <div class="ai-card-header"><span class="ai-badge">Featured</span><span class="ai-time"><i class="fas fa-clock"></i> 2 hours ago</span></div>
-          <h2><a href="post.html">GPT-5 Capabilities Unlock New Possibilities for Somali Language Processing</a></h2>
-          <p>Researchers at the University of Mogadishu demonstrate how GPT-5's multilingual capabilities can now accurately handle Somali dialects.</p>
-          <div class="ai-tags"><span>LLM</span><span>Somali NLP</span><span>Public Sector</span><span>Research</span></div>
-          <a href="post.html" class="read-more">Full Story <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div class="ai-featured-visual"><div class="ai-visual-box"><i class="fas fa-brain"></i><div class="ai-pulse"></div></div></div>
+      <div id="ai-featured-wrap">
+        <div style="text-align:center;padding:3rem;color:#8892a4"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#f0a500"></i></div>
       </div>
-      <div class="ai-news-grid-full reveal">
-        <div class="ai-card" data-cat="health"><div class="ai-card-header"><span class="ai-badge research">Health AI</span><span class="ai-time">5 hours ago</span></div><h3><a href="post.html">AI Health Diagnostics Pilot Launched in Three Somali Hospitals</a></h3><p>A WHO-backed program deploys AI diagnostic tools in Mogadishu, Garowe, and Bosaso hospitals.</p><div class="ai-tags"><span>Healthcare</span><span>Computer Vision</span><span>WHO</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="startup"><div class="ai-card-header"><span class="ai-badge startup">Startup</span><span class="ai-time">Yesterday</span></div><h3><a href="post.html">Somali EdTech Firm Raises $500K to Build AI Tutor for East Africa</a></h3><p>Darro Learning secures seed funding to build an AI-powered tutoring platform for Somali students.</p><div class="ai-tags"><span>EdTech</span><span>Funding</span><span>AI Tutor</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="policy"><div class="ai-card-header"><span class="ai-badge policy">Policy</span><span class="ai-time">2 days ago</span></div><h3><a href="post.html">Government Unveils National AI Strategy Framework for 2026-2030</a></h3><p>Somalia's Federal Government releases a 5-year AI strategy outlining investments in digital infrastructure.</p><div class="ai-tags"><span>Government</span><span>Strategy</span><span>Regulation</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="research"><div class="ai-card-header"><span class="ai-badge research">Research</span><span class="ai-time">3 days ago</span></div><h3><a href="post.html">Somali Dataset Project Releases 1M-Token Training Corpus for AI Models</a></h3><p>A collaborative effort between five African universities creates the largest publicly available Somali language dataset.</p><div class="ai-tags"><span>NLP</span><span>Dataset</span><span>Open Source</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="startup"><div class="ai-card-header"><span class="ai-badge startup">Startup</span><span class="ai-time">4 days ago</span></div><h3><a href="post.html">AgriAI Somalia: AI Crop Monitoring Saves Farmers $2M in Losses</a></h3><p>Startup AgriSomali reports its AI-powered satellite crop monitoring platform helped 3,000 farmers.</p><div class="ai-tags"><span>AgriTech</span><span>Computer Vision</span><span>Food Security</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="breaking"><div class="ai-card-header"><span class="ai-badge">Breaking</span><span class="ai-time">5 days ago</span></div><h3><a href="post.html">Google DeepMind Opens Research Partnership with Somali University</a></h3><p>DeepMind announces a three-year research partnership with Mogadishu University to study AI in low-resource languages.</p><div class="ai-tags"><span>Google</span><span>Research</span><span>Partnership</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="education"><div class="ai-card-header"><span class="ai-badge research">Edu AI</span><span class="ai-time">6 days ago</span></div><h3><a href="post.html">AI Literacy Program Reaches 50,000 Somali Youth in First Year</a></h3><p>A joint UNICEF-government initiative reports 50,000 young Somalis have completed its foundational AI literacy curriculum.</p><div class="ai-tags"><span>Education</span><span>UNICEF</span><span>Youth</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-        <div class="ai-card" data-cat="policy"><div class="ai-card-header"><span class="ai-badge policy">Policy</span><span class="ai-time">1 week ago</span></div><h3><a href="post.html">IGAD Member States Agree on Regional AI Ethics Framework</a></h3><p>The Intergovernmental Authority on Development announces a shared framework for ethical AI development.</p><div class="ai-tags"><span>Ethics</span><span>IGAD</span><span>Regional Policy</span></div><a href="post.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a></div>
-      </div>
-      <div class="load-more-wrapper reveal"><button class="btn-outline load-more-btn" onclick="loadMoreAI()"><i class="fas fa-sync-alt"></i> Load More AI News</button></div>
+      <div id="ai-news-grid" class="ai-news-grid-full reveal"></div>
     </div>
   </section>
   <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo"><div class="logo-hex"><span>N</span></div><div class="logo-text"><span class="logo-main">Nadaara</span><span class="logo-sub">Hub</span></div></div><p>Somalia's leading platform for AI, innovation, and digital transformation stories.</p><div class="footer-social"><a href="https://www.facebook.com/NadaaraHub" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a><a href="https://www.tiktok.com/@NadaaraHub" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a><a href="https://www.linkedin.com/company/NadaaraHub" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a></div></div><div class="footer-col"><h4>Explore</h4><ul><li><a href="blog.html">All Articles</a></li><li><a href="ai-news.html">AI News</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="newsletter.html">Newsletter</a></li><li><a href="login.html">Sign In</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><i class="fas fa-envelope"></i> nadaarahub@gmail.com</li><li><i class="fas fa-phone"></i> +252 611 009 344</li><li><i class="fas fa-map-marker-alt"></i> Mogadishu, Somalia</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 Nadaara Hub. All rights reserved.</p><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div></div></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="main.js"></script>
+  <script>
+  function aesc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function afmt(iso){ if(!iso) return ''; var d=new Date(iso); return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+  var allAINews=[], aiActiveFilter='all';
+
+  function renderAINews(list){
+    var featWrap = document.getElementById('ai-featured-wrap');
+    var grid = document.getElementById('ai-news-grid');
+    if(!list||list.length===0){
+      featWrap.innerHTML='';
+      grid.innerHTML='<div style="text-align:center;padding:5rem 1rem;color:#8892a4;grid-column:1/-1"><i class="fas fa-microchip" style="font-size:3rem;color:#f0a500;display:block;margin-bottom:1.5rem"></i><h3 style="color:#fff;margin-bottom:.5rem">No AI News Yet</h3><p>AI news updates are coming. <a href="newsletter.html" style="color:#f0a500">Subscribe</a> to be notified.</p></div>';
+      return;
+    }
+    var featured = list[0];
+    featWrap.innerHTML='<div class="ai-featured reveal"><div class="ai-featured-content"><div class="ai-card-header"><span class="ai-badge">Latest</span><span class="ai-time"><i class="fas fa-calendar"></i> '+afmt(featured.created_at)+'</span></div><h2>'+aesc(featured.headline)+'</h2><p>'+aesc(featured.summary||'')+'</p>'+(featured.source?'<div class="ai-tags"><span>'+aesc(featured.source)+'</span></div>':'')+'</div><div class="ai-featured-visual"><div class="ai-visual-box"><i class="fas fa-brain"></i><div class="ai-pulse"></div></div></div></div>';
+    grid.innerHTML = list.slice(1).map(function(n){
+      return '<div class="ai-card" data-cat="ainews"><div class="ai-card-header"><span class="ai-badge">AI News</span><span class="ai-time">'+afmt(n.created_at)+'</span></div><h3>'+aesc(n.headline)+'</h3>'+(n.summary?'<p>'+aesc(n.summary)+'</p>':'')+'<div class="ai-tags"><span>'+aesc(n.source||'East Africa')+'</span></div></div>';
+    }).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', async function(){
+    if(typeof db==='undefined'){
+      document.getElementById('ai-featured-wrap').innerHTML='';
+      document.getElementById('ai-news-grid').innerHTML='<div style="text-align:center;padding:3rem;color:#8892a4;grid-column:1/-1">Could not connect to content server.</div>';
+      return;
+    }
+    var res = await db.from('ai_news').select('*').eq('published',true).order('created_at',{ascending:false});
+    allAINews = res.data||[];
+    renderAINews(allAINews);
+
+    document.querySelectorAll('.filter-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+        btn.classList.add('active');
+        renderAINews(allAINews);
+      });
+    });
+  });
+  </script>
 </body>
 </html>

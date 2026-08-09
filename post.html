@@ -86,5 +86,102 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="main.js"></script>
+  <script>
+  function pesc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function pfmt(iso){ if(!iso) return ''; var d=new Date(iso); return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); }
+
+  /* Simple markdown-like renderer: preserves paragraphs, ## headings, **bold** */
+  function renderContent(raw){
+    if(!raw) return '';
+    return raw.split(/\n\n+/).map(function(block){
+      block = block.trim();
+      if(!block) return '';
+      if(/^## /.test(block)) return '<h2>'+pesc(block.slice(3))+'</h2>';
+      if(/^# /.test(block))  return '<h2>'+pesc(block.slice(2))+'</h2>';
+      if(/^> /.test(block))  return '<blockquote><p>'+pesc(block.slice(2))+'</p></blockquote>';
+      var html = pesc(block).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+      return '<p>'+html+'</p>';
+    }).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', async function(){
+    var params = new URLSearchParams(window.location.search);
+    var slugParam = params.get('slug');
+    if(!slugParam || typeof db === 'undefined') return;
+
+    try {
+      var res = await db.from('articles').select('*').eq('slug', slugParam).eq('published', true).single();
+      if(res.error || !res.data){
+        document.querySelector('.post-hero h1').textContent = 'Article Not Found';
+        document.querySelector('.post-hero-desc') && (document.querySelector('.post-hero-desc').textContent = 'This article may have been removed or the link is incorrect.');
+        document.getElementById('articleBody').innerHTML = '<p style="text-align:center;padding:3rem"><a href="blog.html" class="btn-primary">Browse All Articles</a></p>';
+        return;
+      }
+      var a = res.data;
+
+      /* Update page title + meta */
+      document.title = a.title + ' – Nadaara Hub';
+
+      /* Update breadcrumb */
+      var bc = document.querySelector('.post-breadcrumb');
+      if(bc) bc.innerHTML = '<a href="index.html">Home</a><i class="fas fa-chevron-right"></i><a href="blog.html">Blog</a><i class="fas fa-chevron-right"></i><span>'+pesc(a.category||'Article')+'</span>';
+
+      /* Hero */
+      var catEl = document.querySelector('.post-hero-cat');
+      if(catEl) catEl.textContent = a.category || 'Article';
+      var h1 = document.querySelector('.post-hero h1');
+      if(h1) h1.textContent = a.title;
+      var desc = document.querySelector('.post-hero-desc');
+      if(desc) desc.textContent = a.summary || '';
+
+      /* Author / meta */
+      var av = document.querySelector('.author-avatar');
+      if(av) av.textContent = (a.author_name||'N').charAt(0).toUpperCase();
+      var an = document.querySelector('.author-name');
+      if(an) an.textContent = a.author_name || 'Nadaara Hub';
+      var details = document.querySelector('.post-details');
+      if(details) details.innerHTML = '<span><i class="fas fa-calendar"></i> '+pfmt(a.created_at)+'</span>';
+
+      /* Hero background */
+      var heroBg = document.querySelector('.post-hero-bg');
+      if(heroBg && a.featured_image) heroBg.style.background = 'url("'+a.featured_image+'") center/cover';
+
+      /* Article body */
+      var body = document.getElementById('articleBody');
+      if(body){
+        var contentHtml = renderContent(a.content);
+        body.innerHTML = contentHtml +
+          '<div class="post-reactions"><button class="like-btn" id="likeBtn" onclick="toggleLike()"><i class="fas fa-heart"></i> <span id="likeCount">0</span> Likes</button>'+
+          '<div class="share-row"><span>Share:</span>'+
+          '<a href="#" onclick="sharePost(\'twitter\')" class="share-pill twitter"><i class="fab fa-twitter"></i> Twitter</a>'+
+          '<a href="#" onclick="sharePost(\'linkedin\')" class="share-pill linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</a>'+
+          '<a href="#" onclick="sharePost(\'whatsapp\')" class="share-pill whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>'+
+          '<button onclick="copyLink()" class="share-pill copy"><i class="fas fa-link"></i> Copy</button></div></div>'+
+          '<div class="author-box"><div class="author-avatar-lg">'+((a.author_name||'N').charAt(0).toUpperCase())+'</div>'+
+          '<div class="author-info"><h4>'+pesc(a.author_name||'Nadaara Hub')+'</h4><span class="author-role">Nadaara Hub</span></div></div>'+
+          '<div class="comments-section"><h3 class="comments-title"><i class="fas fa-comments"></i> Comments</h3>'+
+          '<form class="comment-form" onsubmit="submitComment(event)"><h4>Leave a Comment</h4>'+
+          '<div class="comment-form-row"><input type="text" placeholder="Your name" required><input type="email" placeholder="Email (not published)" required></div>'+
+          '<textarea placeholder="Share your thoughts…" rows="4" required></textarea>'+
+          '<button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Post Comment</button></form></div>';
+      }
+
+      /* Sidebar newsletter */
+      var snl = document.getElementById('sidebar-nl-email');
+      /* Load related articles in sidebar */
+      var sbPosts = document.querySelector('.sidebar-posts');
+      if(sbPosts && a.category){
+        var rel = await db.from('articles').select('title,slug').eq('published',true).eq('category',a.category).neq('slug',slugParam).limit(3);
+        if(rel.data && rel.data.length>0){
+          sbPosts.innerHTML = rel.data.map(function(r,i){
+            return '<a href="post.html?slug='+pesc(r.slug)+'" class="sidebar-post"><span class="sidebar-num">0'+(i+1)+'</span><div><h5>'+pesc(r.title)+'</h5></div></a>';
+          }).join('');
+        }
+      }
+    } catch(err){
+      console.error('Error loading article:', err);
+    }
+  });
+  </script>
 </body>
 </html>
