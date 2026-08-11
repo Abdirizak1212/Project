@@ -1,0 +1,39 @@
+Effort Estimation Analysis Report
+========================================
+
+Tasks analyzed: 500
+Total estimated hours: 12714.4
+Total actual hours:    17171.0
+Overall schedule variance: 4456.6 hours (35.1%)
+
+Accuracy metrics:
+  MAE  (mean absolute error):        12.11 hours
+  RMSE (root mean squared error):    17.82 hours
+  MAPE (mean absolute % error):      45.60%
+  Mean bias (actual - estimated):    8.91 hours (under-estimation on average)
+  Tasks that ran over estimate:      76.6%
+
+Breakdown by task type (worst MAPE first):
+             n_tasks  mae_hours  mean_bias_hours  mape_pct
+task_type                                                 
+new_feature     87.0      22.53            19.18     58.29
+integration    106.0      19.02            15.61     58.15
+bug_fix        105.0       4.08             2.67     42.15
+refactor       110.0       8.98             5.39     35.50
+ui_design       92.0       7.20             2.83     35.16
+
+Breakdown by developer seniority:
+                     n_tasks  mae_hours  mean_bias_hours  mape_pct
+developer_seniority                                               
+junior                 177.0      14.68             8.70     54.88
+mid                    193.0      11.97             9.43     43.69
+senior                 130.0       8.80             8.44     35.80
+
+Breakdown by complexity rating:
+            n_tasks  mae_hours  mean_bias_hours  mape_pct
+complexity                                               
+1             113.0       8.04             6.47     49.68
+2             102.0       9.62             7.59     42.68
+3              96.0      13.54            10.56     49.19
+4              91.0      14.45             9.79     43.89
+5              98.0      15.81            10.69     42.00
